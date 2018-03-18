@@ -31,6 +31,7 @@
         </dependency>
     </dependencies>
     <build>
+        <!--scala编译插件-->
         <plugins>
         <plugin>
             <groupId>org.scala-tools</groupId>
