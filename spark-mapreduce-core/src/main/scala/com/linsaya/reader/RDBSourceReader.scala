@@ -11,7 +11,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
 
 trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil {
 
-  def readSource(sc: SparkContext, sqlContext: SQLContext, rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]) = {
+  def readRDBSource(sc: SparkContext, sqlContext: SQLContext, rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]) = {
     for (prop <- rdbProp) {
       info(s"start load connectionProperties table name is ${prop.sourceTableName}")
       val connectionProperties = new Properties()
