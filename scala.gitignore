@@ -1,6 +1,6 @@
 # Compiled class file
-*.class
-*.scala
+*.iml
+.idea
 
 # Log file
 *.log
