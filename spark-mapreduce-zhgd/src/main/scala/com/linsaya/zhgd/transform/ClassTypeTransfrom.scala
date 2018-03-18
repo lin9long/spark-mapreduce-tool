@@ -14,6 +14,6 @@ class ClassTypeTransfrom extends CustomTransform {
   override def transform(dataframe: DataFrame, sqlContext: SQLContext, sc: SparkContext) = {
     import org.apache.spark.sql.functions._
     import sqlContext.implicits._
-    dataframe.withColumn("score", when($"cid" isNotNull, 133))
+    dataframe.withColumn("score", when($"cid" isNotNull, 13312321))
   }
 }
