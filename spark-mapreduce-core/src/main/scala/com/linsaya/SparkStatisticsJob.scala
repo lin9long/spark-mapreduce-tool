@@ -12,7 +12,7 @@ import com.linsaya.manager.{DataSourcePropManager, KpiStatisticsPropManager, Pro
   * @author llz
   * @create 2018-03-17 15:16
   **/
-object SparkStatisticsJob extends SparkConfHolder(application = System.getProperty("appname"))
+object SparkStatisticsJob extends SparkConfHolder
   with PropFileManager with RDBPropManager with KpiStatisticsPropManager
   with DataSourcePropManager with Constants with LoggerUtil {
 
@@ -46,7 +46,7 @@ object SparkStatisticsJob extends SparkConfHolder(application = System.getProper
                 dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
     val clazz = Class.forName(className)
     //    if (clazz.getClass == classOf[MapReduceJob]) {
-    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob(sc, hiveCtx, sqlContext, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
+    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob( kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
       dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp])
     //    }
   }

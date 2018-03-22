@@ -5,13 +5,13 @@ import java.util.Properties
 import com.linsaya.SparkStatisticsJob
 import com.linsaya.common.CustomTransform
 import com.linsaya.common.util.{LoggerUtil, RDBDataframeUtil}
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.{DataFrame, SQLContext}
+import com.linsaya.conf.SparkConfHolder
+import org.apache.spark.sql.DataFrame
 
 
-trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil {
+trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil with SparkConfHolder{
 
-  def readRDBSource(sc: SparkContext, sqlContext: SQLContext, rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]) = {
+  def readRDBSource(rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]) = {
     for (prop <- rdbProp) {
       info(s"start load connectionProperties table name is ${prop.sourceTableName}")
       val connectionProperties = new Properties()
