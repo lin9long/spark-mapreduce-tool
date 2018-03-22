@@ -5,9 +5,10 @@ import com.linsaya.job.MapReduceJob
 import com.linsaya.job.MapReduceJob
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.hive.HiveContext
 
 class StatisticsMapReduceJob extends MapReduceJob{
-  override def excuteJob(sc: SparkContext, sQLContext: SQLContext,kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
+  override def excuteJob(sc: SparkContext, sQLContext: HiveContext, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
                          dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
     println("excuteJob------->StatisticsMapReduceJob")
   }

@@ -6,19 +6,20 @@ import com.linsaya.job.MapReduceJob
 import com.linsaya.reader.{HiveDataSourceReader, RDBSourceReader}
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.hive.HiveContext
 
  class KpiMapReduceJob extends MapReduceJob with LoggerUtil with RDBSourceReader with HiveDataSourceReader{
 
-  override def excuteJob(sc: SparkContext, sqLContext: SQLContext, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
+  override def excuteJob(sc: SparkContext, sqLContext: HiveContext, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
                          dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], rdbSQLProps: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
     if(!dataSourceProps.isEmpty){
-      info(s"rdbSQLProps size is not empty ,size is ${rdbSQLProps.length}")
+      info(s"hiveSQLProps size is not empty ,size is ${rdbSQLProps.length}")
       readHiveSource(sc,sqLContext,dataSourceProps)
     }
 
     if(!rdbSQLProps.isEmpty){
       info(s"rdbSQLProps size is not empty ,size is ${rdbSQLProps.length}")
-      readRDBSource(sc,sqLContext,rdbSQLProps)
+//      readRDBSource(sc,sqLContext,rdbSQLProps)
     }
   }
 }
