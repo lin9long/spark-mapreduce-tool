@@ -37,6 +37,8 @@ object SparkStatisticsJob extends SparkConfHolder(application = System.getProper
     val RDBprops = genRDBSQLProp(rdbsourcepaths)
 
     excuteJob(className, kpiStatisticsProps, dataSourceProps, RDBprops)
+    sqlContext.sql("select * from teacher_tmp").show()
+    sqlContext.sql("select * from student_tmp").show()
 
   }
 
@@ -44,7 +46,7 @@ object SparkStatisticsJob extends SparkConfHolder(application = System.getProper
                 dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
     val clazz = Class.forName(className)
     //    if (clazz.getClass == classOf[MapReduceJob]) {
-    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob(sc, hiveCtx, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
+    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob(sc, hiveCtx, sqlContext, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
       dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp])
     //    }
   }

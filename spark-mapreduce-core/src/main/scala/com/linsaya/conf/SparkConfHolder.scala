@@ -11,7 +11,7 @@ abstract class SparkConfHolder(application: String) {
   val sc = new SparkContext(conf)
   val hdc = sc.hadoopConfiguration
   //  val hdfs = org.apache.hadoop.fs.FileSystem.get(hdc)
-//  val sqlContext = new SQLContext(sc)
+  val sqlContext = new SQLContext(sc)
   val hiveCtx = new HiveContext(sc)
   hiveCtx.sql("SET spark.sql.shuffle.partitions=100")
 

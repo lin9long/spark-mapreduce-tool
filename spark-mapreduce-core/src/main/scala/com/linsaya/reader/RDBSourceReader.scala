@@ -26,15 +26,17 @@ trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil {
       dataframe.registerTempTable(prop.tmpTableNameInSpark)
 
       if (!prop.sql.isEmpty) {
+        info(s"dataframe etl sql is ${prop.sql}")
         dataframe = sqlContext.sql(prop.sql)
       }
 
       if (!prop.customTransForm.isEmpty) {
         val className = prop.customTransForm
         val clazz = Class.forName(className)
+        info(s"dataframe customTransForm model is  ${prop.customTransForm}")
         dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, sqlContext, sc)
       }
-
+      info(s"dataframe registerTempTable name is ${prop.tmpTableNameInSpark} count is ${dataframe.count()}")
       dataframe.registerTempTable(prop.tmpTableNameInSpark)
     }
   }
