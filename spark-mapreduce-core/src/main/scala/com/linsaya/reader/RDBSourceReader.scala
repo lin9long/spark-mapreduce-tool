@@ -5,13 +5,14 @@ import java.util.Properties
 import com.linsaya.SparkStatisticsJob
 import com.linsaya.common.CustomTransform
 import com.linsaya.common.util.{LoggerUtil, RDBDataframeUtil}
-import com.linsaya.conf.SparkConfHolder
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.SparkContext
+import org.apache.spark.sql.{DataFrame, SQLContext}
+import org.apache.spark.storage.StorageLevel
 
 
-trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil with SparkConfHolder{
+trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil {
 
-  def readRDBSource(rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]) = {
+  def readRDBSource(sc: SparkContext, sqlContext: SQLContext, rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]) = {
     for (prop <- rdbProp) {
       info(s"start load connectionProperties table name is ${prop.sourceTableName}")
       val connectionProperties = new Properties()
@@ -38,6 +39,10 @@ trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil with SparkConfHol
       }
       info(s"dataframe registerTempTable name is ${prop.tmpTableNameInSpark} count is ${dataframe.count()}")
       dataframe.registerTempTable(prop.tmpTableNameInSpark)
+      if (!prop.storageLevel.isEmpty && prop.needCacheTable == "Y") {
+        info(s"dataframe  ${prop.tmpTableNameInSpark}storageLevel is ")
+        dataframe.persist(StorageLevel.MEMORY_AND_DISK)
+      }
     }
   }
 }

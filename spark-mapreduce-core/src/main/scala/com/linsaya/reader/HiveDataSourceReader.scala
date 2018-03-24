@@ -2,8 +2,9 @@ package com.linsaya.reader
 
 import com.linsaya.SparkStatisticsJob
 import com.linsaya.common.util.LoggerUtil
-import com.linsaya.conf.SparkConfHolder
+import org.apache.spark.SparkContext
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.hive.HiveContext
 
 /**
   * ${DESCRIPTION}
@@ -11,8 +12,8 @@ import org.apache.spark.sql.DataFrame
   * @author llz
   * @create 2018-03-18 9:30
   **/
-trait HiveDataSourceReader extends LoggerUtil with SparkConfHolder {
-  def readHiveSource(rdbProp: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp]) = {
+trait HiveDataSourceReader extends LoggerUtil  {
+  def readHiveSource(hiveCtx:HiveContext,rdbProp: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp]) = {
     for (prop <- rdbProp) {
       info(s"start load connectionProperties table name is ${prop.sourceTableName}")
       var dataframe: DataFrame = null
@@ -23,9 +24,9 @@ trait HiveDataSourceReader extends LoggerUtil with SparkConfHolder {
       } else prop.sql)
       info(s"dataframe registerTempTable name is ${prop.tmpTableNameInSpark} count is ${dataframe.count()}")
       dataframe.registerTempTable(prop.tmpTableNameInSpark.toString)
-      val sql = s"select * from ${prop.tmpTableNameInSpark}"
-      info(s"execute sql is $sql")
-      hiveCtx.sql(s"select * from ${prop.tmpTableNameInSpark}").show()
+      //      val sql = s"select * from ${prop.tmpTableNameInSpark}"
+      //      info(s"execute sql is $sql")
+      //      hiveCtx.sql(s"select * from ${prop.tmpTableNameInSpark}").show()
     }
   }
 }

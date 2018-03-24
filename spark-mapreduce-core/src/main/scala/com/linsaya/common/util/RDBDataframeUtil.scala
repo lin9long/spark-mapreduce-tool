@@ -1,6 +1,6 @@
 package com.linsaya.common.util
 
-import java.sql.{Connection, ResultSet}
+import java.sql.ResultSet
 import java.util.Properties
 
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
@@ -23,7 +23,6 @@ trait RDBDataframeUtil {
     * @Date: 2018/3/18
     */
   def getRDBSchemaByTableName(connectionProperties: Properties, sql: String): Unit = {
-    import java.util.Properties
     //    df2.write.mode(SaveMode.Append).jdbc("jdbc:oracle:thin:@192.168.6.98:1521:xe", "TEST", connectionProperties)
     //    df1.write.mode(SaveMode.Append).jdbc("jdbc:oracle:thin:@192.168.6.98:1521:xe", "F_CZ_GEMSTACK_APP_KPI_H", connectionProperties)
     import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
@@ -48,7 +47,6 @@ trait RDBDataframeUtil {
     * @Date: 2018/3/18
     */
   def getRDBSchemaBySqlResult(connectionProperties: Properties, result: ResultSet): (ArrayBuffer[Tuple2[String, String]]) = {
-    import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
     val url = connectionProperties.getProperty("url")
     //    val connection = JdbcUtils.createConnectionFactory(url, connectionProperties).apply()
     //    val result = connection.createStatement().executeQuery(sql)

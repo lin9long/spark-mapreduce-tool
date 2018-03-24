@@ -5,6 +5,9 @@ import com.linsaya.common.util.LoggerUtil
 import com.linsaya.conf.SparkConfHolder
 import com.linsaya.job.MapReduceJob
 import com.linsaya.manager.{DataSourcePropManager, KpiStatisticsPropManager, PropFileManager, RDBPropManager}
+import org.apache.spark.SparkContext
+import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.hive.HiveContext
 
 /**
   * ${DESCRIPTION}
@@ -37,8 +40,8 @@ object SparkStatisticsJob extends SparkConfHolder
     val RDBprops = genRDBSQLProp(rdbsourcepaths)
 
     excuteJob(className, kpiStatisticsProps, dataSourceProps, RDBprops)
-    sqlContext.sql("select * from teacher_tmp").show()
-    sqlContext.sql("select * from student_tmp").show()
+    hiveCtx.sql("select * from wb_http_tmp").show()
+//    sqlContext.sql("select * from student_tmp").show()
 
   }
 
@@ -46,7 +49,9 @@ object SparkStatisticsJob extends SparkConfHolder
                 dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
     val clazz = Class.forName(className)
     //    if (clazz.getClass == classOf[MapReduceJob]) {
-    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob( kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
+    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob(
+      sc:SparkContext,hiveCtx:HiveContext,sqlContext:SQLContext,
+      kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
       dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp])
     //    }
   }
