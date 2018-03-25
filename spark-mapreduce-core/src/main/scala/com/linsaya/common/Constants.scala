@@ -11,6 +11,10 @@ trait Constants {
     "mysql" -> {
       List(Tuple2("user", "root"), Tuple2("password", "root"),
         Tuple2("driver", "com.mysql.jdbc.Driver"), Tuple2("url", "jdbc:mysql://192.168.199.160:3306/school"))
+    },
+    "phoenix" -> {
+      List(Tuple2("user", ""), Tuple2("password", ""),
+        Tuple2("driver", "org.apache.phoenix.jdbc.PhoenixDriver"), Tuple2("url", "jdbc:phoenix:master:2181"))
     }
   )
 

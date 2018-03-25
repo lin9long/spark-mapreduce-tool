@@ -1,9 +1,9 @@
 package com.linsaya.worker
 
 import com.linsaya.SparkStatisticsJob
-import com.linsaya.common.util.{SaveTableUtils, LoggerUtil}
+import com.linsaya.common.util.{LoggerUtil, SaveTableUtils}
 import com.linsaya.writer.DataframeHbaseWriter
-import org.apache.spark.sql.{DataFrame, SQLContext}
+import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
 
 /**
   * ${DESCRIPTION}
@@ -26,7 +26,7 @@ trait KpiStatisticsWorker extends LoggerUtil with SaveTableUtils with DataframeH
       }
       if (!kpiProp.targetPathOfHDFS.isEmpty) {
         info(s"targetPathInHdfs is ${replacePlaceholder(kpiProp.targetPathOfHDFS)}")
-        dataframe.write.parquet(replacePlaceholder(kpiProp.targetPathOfHDFS))
+        dataframe.write.mode(SaveMode.Append).parquet(replacePlaceholder(kpiProp.targetPathOfHDFS))
       }
       if (!kpiProp.targetTableNameInDB.isEmpty) {
         info(s"targetTableNameInDB is ${replacePlaceholder(kpiProp.targetTableNameInDB)}")
