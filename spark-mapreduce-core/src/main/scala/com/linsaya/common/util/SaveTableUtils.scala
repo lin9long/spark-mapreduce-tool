@@ -9,7 +9,7 @@ import org.apache.spark.storage.StorageLevel
   * @author llz
   * @create 2018-03-25 11:41
   **/
-trait CacheTableUtils {
+trait SaveTableUtils {
 
   def getStorageLevel(str: String): StorageLevel = {
     str match {

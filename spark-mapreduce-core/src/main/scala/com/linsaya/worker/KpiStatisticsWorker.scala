@@ -1,8 +1,9 @@
 package com.linsaya.worker
 
 import com.linsaya.SparkStatisticsJob
-import com.linsaya.common.util.{CacheTableUtils, LoggerUtil}
-import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
+import com.linsaya.common.util.{SaveTableUtils, LoggerUtil}
+import com.linsaya.writer.DataframeHbaseWriter
+import org.apache.spark.sql.{DataFrame, SQLContext}
 
 /**
   * ${DESCRIPTION}
@@ -10,7 +11,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext, SaveMode}
   * @author llz
   * @create 2018-03-25 11:31
   **/
-trait KpiStatisticsWorker extends LoggerUtil with CacheTableUtils {
+trait KpiStatisticsWorker extends LoggerUtil with SaveTableUtils with DataframeHbaseWriter {
 
   def excuteKpiStatistics(hiveCtx: SQLContext, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp]) = {
     var dataframe: DataFrame = null
@@ -25,7 +26,11 @@ trait KpiStatisticsWorker extends LoggerUtil with CacheTableUtils {
       }
       if (!kpiProp.targetPathOfHDFS.isEmpty) {
         info(s"targetPathInHdfs is ${replacePlaceholder(kpiProp.targetPathOfHDFS)}")
-        dataframe.write.mode(SaveMode.Overwrite).parquet(replacePlaceholder(kpiProp.targetPathOfHDFS))
+        dataframe.write.parquet(replacePlaceholder(kpiProp.targetPathOfHDFS))
+      }
+      if (!kpiProp.targetTableNameInDB.isEmpty) {
+        info(s"targetTableNameInDB is ${replacePlaceholder(kpiProp.targetTableNameInDB)}")
+        writeDataFrameToHbase(kpiProp.targetTableNameInDB, dataframe)
       }
     }
   }

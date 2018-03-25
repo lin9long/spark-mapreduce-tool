@@ -4,12 +4,12 @@ import java.util.Properties
 
 import com.linsaya.SparkStatisticsJob
 import com.linsaya.common.CustomTransform
-import com.linsaya.common.util.{CacheTableUtils, LoggerUtil, RDBDataframeUtil}
+import com.linsaya.common.util.{SaveTableUtils, LoggerUtil, RDBDataframeUtil}
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.{DataFrame, SQLContext}
 
 
-trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil with CacheTableUtils{
+trait RDBSourceReader extends  RDBDataframeUtil with LoggerUtil with SaveTableUtils{
 
   def readRDBSource(sc: SparkContext, sqlContext: SQLContext, rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]) = {
     var dataframe: DataFrame = null
