@@ -40,7 +40,7 @@ object SparkStatisticsJob extends SparkConfHolder
     val RDBprops = genRDBSQLProp(rdbsourcepaths)
 
     excuteJob(className, kpiStatisticsProps, dataSourceProps, RDBprops)
-    hiveCtx.sql("select * from wb_http_tmp").show()
+//    hiveCtx.sql("select * from wb_http_tmp").show()
 //    sqlContext.sql("select * from student_tmp").show()
 
   }

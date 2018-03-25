@@ -4,22 +4,28 @@ import com.linsaya.SparkStatisticsJob
 import com.linsaya.common.util.LoggerUtil
 import com.linsaya.job.MapReduceJob
 import com.linsaya.reader.{HiveDataSourceReader, RDBSourceReader}
+import com.linsaya.worker.KpiStatisticsWorker
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.hive.HiveContext
 
- class KpiMapReduceJob extends MapReduceJob with LoggerUtil with RDBSourceReader with HiveDataSourceReader{
+class KpiMapReduceJob extends MapReduceJob with LoggerUtil with RDBSourceReader with HiveDataSourceReader with KpiStatisticsWorker{
 
-  override def excuteJob(sc:SparkContext,hiveCtx:HiveContext,sqlContext:SQLContext, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
+  override def excuteJob(sc: SparkContext, hiveCtx: HiveContext, sqlContext: SQLContext, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
                          dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], rdbSQLProps: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
-    if(!dataSourceProps.isEmpty){
+    if (!dataSourceProps.isEmpty) {
       info(s"hiveSQLProps size is not empty ,size is ${rdbSQLProps.length}")
-      readHiveSource(hiveCtx:HiveContext,dataSourceProps)
+      //      readHiveSource(hiveCtx,dataSourceProps)
     }
 
-    if(!rdbSQLProps.isEmpty){
+    if (!rdbSQLProps.isEmpty) {
       info(s"rdbSQLProps size is not empty ,size is ${rdbSQLProps.length}")
-//      readRDBSource(rdbSQLProps)
+      readRDBSource(sc, sqlContext, rdbSQLProps)
+    }
+
+    if (!kpiStatisticsProps.isEmpty) {
+      info(s"kpiStatisticsProps size is not empty ,size is ${kpiStatisticsProps.length}")
+      excuteKpiStatistics(sqlContext,kpiStatisticsProps)
     }
   }
 }

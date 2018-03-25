@@ -11,5 +11,4 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
   **/
 trait CustomTransform {
   def transform(dataframe: DataFrame, sqlContext: SQLContext, sc: SparkContext):DataFrame
-
 }

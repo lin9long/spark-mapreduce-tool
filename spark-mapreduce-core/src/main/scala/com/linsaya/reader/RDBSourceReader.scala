@@ -4,15 +4,15 @@ import java.util.Properties
 
 import com.linsaya.SparkStatisticsJob
 import com.linsaya.common.CustomTransform
-import com.linsaya.common.util.{LoggerUtil, RDBDataframeUtil}
+import com.linsaya.common.util.{CacheTableUtils, LoggerUtil, RDBDataframeUtil}
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.{DataFrame, SQLContext}
-import org.apache.spark.storage.StorageLevel
 
 
-trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil {
+trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil with CacheTableUtils{
 
   def readRDBSource(sc: SparkContext, sqlContext: SQLContext, rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]) = {
+    var dataframe: DataFrame = null
     for (prop <- rdbProp) {
       info(s"start load connectionProperties table name is ${prop.sourceTableName}")
       val connectionProperties = new Properties()
@@ -22,7 +22,6 @@ trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil {
       connectionProperties.put("table", prop.sourceTableName)
       connectionProperties.put("url", prop.url)
 
-      var dataframe: DataFrame = null
       dataframe = createDataFrameFromRDB(sqlContext, connectionProperties, prop.url)
       dataframe.registerTempTable(prop.tmpTableNameInSpark)
 
@@ -34,14 +33,15 @@ trait RDBSourceReader extends RDBDataframeUtil with LoggerUtil {
       if (!prop.customTransForm.isEmpty) {
         val className = prop.customTransForm
         val clazz = Class.forName(className)
-        info(s"dataframe customTransForm model is  ${prop.customTransForm}")
+        info(s"dataframe customTransForm model is ${prop.customTransForm}")
         dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, sqlContext, sc)
       }
+
       info(s"dataframe registerTempTable name is ${prop.tmpTableNameInSpark} count is ${dataframe.count()}")
       dataframe.registerTempTable(prop.tmpTableNameInSpark)
       if (!prop.storageLevel.isEmpty && prop.needCacheTable == "Y") {
-        info(s"dataframe  ${prop.tmpTableNameInSpark}storageLevel is ")
-        dataframe.persist(StorageLevel.MEMORY_AND_DISK)
+        info(s"dataframe ${prop.tmpTableNameInSpark}storageLevel is ${prop.storageLevel}")
+        dataframe.persist(getStorageLevel(prop.storageLevel))
       }
     }
   }
