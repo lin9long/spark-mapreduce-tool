@@ -1,5 +1,6 @@
 package com.linsaya.writer
 
+import java.sql.Connection
 import java.util.Properties
 
 import com.linsaya.common.Constants

@@ -22,21 +22,22 @@ trait RDBDataframeUtil {
     * @author: llz
     * @Date: 2018/3/18
     */
-  def getRDBSchemaByTableName(connectionProperties: Properties, sql: String): Unit = {
+  def getRDBSchemaByTableName(conn: Properties, sql: String): ArrayBuffer[Tuple2[String, String]] = {
     //    df2.write.mode(SaveMode.Append).jdbc("jdbc:oracle:thin:@192.168.6.98:1521:xe", "TEST", connectionProperties)
     //    df1.write.mode(SaveMode.Append).jdbc("jdbc:oracle:thin:@192.168.6.98:1521:xe", "F_CZ_GEMSTACK_APP_KPI_H", connectionProperties)
     import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
-    val url = "jdbc:oracle:thin:@192.168.6.98:1521:xe"
-    val connection = JdbcUtils.createConnectionFactory(url, connectionProperties).apply()
+    val url = conn.getProperty("url","")
+    val connection = JdbcUtils.createConnectionFactory(url, conn).apply()
     //    val result = connection.createStatement().executeQuery(sql)
     val schema = connection.getMetaData
-    val columnSet = schema.getColumns(null, null, connectionProperties.getProperty("table"), "%")
+    val columnSet = schema.getColumns(null, null, conn.getProperty("table"), "%")
     import scala.collection.mutable.ArrayBuffer
     val schemaVaule = ArrayBuffer[Tuple2[String, String]]()
     while (columnSet.next()) {
       schemaVaule += (Tuple2(columnSet.getString("COLUMN_NAME"),
         columnSet.getString("TYPE_NAME")))
     }
+    schemaVaule
   }
 
   /**
@@ -66,8 +67,8 @@ trait RDBDataframeUtil {
     * @author: llz
     * @Date: 2018/3/18
     */
-  def getResultSetBySql(connectionProperties: Properties, sql: String): ResultSet = {
-    val connection = JdbcUtils.createConnectionFactory(connectionProperties.getProperty("url"), connectionProperties).apply()
+  def getResultSetBySql(conn: Properties, sql: String): ResultSet = {
+    val connection = JdbcUtils.createConnectionFactory(conn.getProperty("url"), conn).apply()
     connection.createStatement().executeQuery(sql)
   }
 
