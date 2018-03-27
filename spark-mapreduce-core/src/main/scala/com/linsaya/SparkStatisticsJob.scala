@@ -4,7 +4,7 @@ import com.linsaya.common.Constants
 import com.linsaya.common.util.LoggerUtil
 import com.linsaya.conf.SparkConfHolder
 import com.linsaya.job.MapReduceJob
-import com.linsaya.manager.{DataSourcePropManager, KpiStatisticsPropManager, PropFileManager, RDBPropManager}
+import com.linsaya.manager.{HiveSourcePropManager, KpiStatisticsPropManager, PropFileManager, RDBPropManager}
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.hive.HiveContext
@@ -17,7 +17,7 @@ import org.apache.spark.sql.hive.HiveContext
   **/
 object SparkStatisticsJob extends SparkConfHolder
   with PropFileManager with RDBPropManager with KpiStatisticsPropManager
-  with DataSourcePropManager with Constants with LoggerUtil {
+  with HiveSourcePropManager with Constants with LoggerUtil {
 
 
   def main(args: Array[String]): Unit = {
@@ -32,27 +32,18 @@ object SparkStatisticsJob extends SparkConfHolder
     val appPropFile = getPropertiesFile(appConf)
 
     val kpipaths = appPropFile.getProperty(kpi_statistics_sql_file_paths).split(",")
-    val datasourcepaths = appPropFile.getProperty(hive_data_source_sql_file_paths).split(",")
-    val rdbsourcepaths = appPropFile.getProperty(rdb_data_source_sql_file_paths).split(",")
 
-    val kpiStatisticsProps = genKpiStatisticsProp(kpipaths)
-    val dataSourceProps = genDataSourceSQLProp(datasourcepaths)
-    val RDBprops = genRDBSQLProp(rdbsourcepaths)
-
-    excuteJob(className, kpiStatisticsProps, dataSourceProps, RDBprops)
+    excuteJob(className)
 //    hiveCtx.sql("select * from wb_http_tmp").show()
 //    sqlContext.sql("select * from student_tmp").show()
 
   }
 
-  def excuteJob(className: String, kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
-                dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
+  def excuteJob(className: String): Unit = {
     val clazz = Class.forName(className)
     //    if (clazz.getClass == classOf[MapReduceJob]) {
     clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob(
-      sc:SparkContext,hiveCtx:HiveContext,sqlContext:SQLContext,
-      kpiStatisticsProps: IndexedSeq[SparkStatisticsJob.KpiStatisticsSQLProp],
-      dataSourceProps: IndexedSeq[SparkStatisticsJob.DataSourceSQLProp], RDBprops: IndexedSeq[SparkStatisticsJob.RDBSQLProp])
+      sc:SparkContext,hiveCtx:HiveContext,sqlContext:SQLContext)
     //    }
   }
 

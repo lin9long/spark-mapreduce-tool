@@ -1,11 +1,14 @@
 package com.linsaya.manager
 
-import com.linsaya.SparkStatisticsJob.getPropertiesFile
+import java.util.Properties
+
+import com.linsaya.SparkStatisticsJob.{getPropertiesFile, hive_data_source_sql_file_paths}
 import com.linsaya.common.util.LoggerUtil
 
-trait DataSourcePropManager extends LoggerUtil {
+trait HiveSourcePropManager extends LoggerUtil with PropFileManager{
 
-  def genDataSourceSQLProp(paths: Array[String]): IndexedSeq[DataSourceSQLProp] = {
+  def genDataSourceSQLProp(appPropFile:Properties): IndexedSeq[DataSourceSQLProp] = {
+    val paths = appPropFile.getProperty(hive_data_source_sql_file_paths).split(",")
     if (paths.isEmpty) {
       error("DataSourceSQLProp is empty")
     }

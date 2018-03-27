@@ -1,11 +1,10 @@
 package com.linsaya.reader.impl
 
-import com.linsaya.SparkStatisticsJob
-import com.linsaya.common.util.LoggerUtil
+import com.linsaya.manager.HiveSourcePropManager
 import com.linsaya.reader.SourceReader
 import org.apache.spark.SparkContext
-import org.apache.spark.sql.{DataFrame, SQLContext}
 import org.apache.spark.sql.hive.HiveContext
+import org.apache.spark.sql.{DataFrame, SQLContext}
 
 /**
   * ${DESCRIPTION}
@@ -13,11 +12,13 @@ import org.apache.spark.sql.hive.HiveContext
   * @author llz
   * @create 2018-03-18 9:30
   **/
-class HiveDataSourceReader extends SourceReader with LoggerUtil {
+class HiveDataSourceReader extends SourceReader with HiveSourcePropManager {
 
-   def readDataSource(sc: SparkContext, sqlContext: SQLContext, hiveCtx: HiveContext, rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
-     for (prop <- rdbProp) {
-       info(s"start load connectionProperties table name is ${prop.sourceTableName}")
+  def readDataSource(sc: SparkContext, sqlContext: SQLContext, hiveCtx: HiveContext): Unit = {
+    //获取hive配置文件
+    val hiveProp = genDataSourceSQLProp(getSysPropertiesFile)
+    for (prop <- hiveProp) {
+      info(s"start load hiveSourceProp table name is ${prop.sourceTableName}")
        var dataframe: DataFrame = null
        info(s"HiveDataSourceReader sql is ${prop.sql}")
        dataframe = hiveCtx.sql(if (prop.sql.isEmpty) {

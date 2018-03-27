@@ -1,14 +1,17 @@
 package com.linsaya.manager
 
-import com.linsaya.SparkStatisticsJob.getPropertiesFile
+import java.util.Properties
+
+import com.linsaya.SparkStatisticsJob.{getPropertiesFile, kpi_statistics_sql_file_paths}
 import com.linsaya.common.util.LoggerUtil
 
-trait KpiStatisticsPropManager extends LoggerUtil {
+trait KpiStatisticsPropManager extends LoggerUtil with PropFileManager {
 
   case class KpiStatisticsSQLProp(sqlNo: String, sql: String, storageLevel: String, needCacheTable: String,
                                   targetTableNameInDB: String, targetPathOfHDFS: String, tmpTableNameInSpark: String)
 
-  def genKpiStatisticsProp(paths: Array[String]): IndexedSeq[KpiStatisticsSQLProp] = {
+  def genKpiStatisticsProp(appPropFile: Properties): IndexedSeq[KpiStatisticsSQLProp] = {
+    val paths = appPropFile.getProperty(kpi_statistics_sql_file_paths).split(",")
     if (paths.isEmpty){
       error("KpiStatisticsSQLProp is empty")
     }

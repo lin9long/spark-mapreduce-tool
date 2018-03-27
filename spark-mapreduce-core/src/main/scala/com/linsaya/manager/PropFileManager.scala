@@ -14,10 +14,14 @@ trait PropFileManager {
    * @Date: 2018/3/25
    */
   def getPropertiesFile(filepath: String): Properties = {
-      val ips = new BufferedInputStream(new FileInputStream(filepath))
-      val prop = new Properties
-      prop.load(ips)
-      prop
+    val ips = new BufferedInputStream(new FileInputStream(filepath))
+    val prop = new Properties
+    prop.load(ips)
+    prop
+  }
+
+  def getSysPropertiesFile: Properties = {
+    getPropertiesFile(System.getProperty("appConf.path"))
   }
 
 }

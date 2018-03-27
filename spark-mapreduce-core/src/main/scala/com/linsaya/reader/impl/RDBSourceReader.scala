@@ -2,9 +2,9 @@ package com.linsaya.reader.impl
 
 import java.util.Properties
 
-import com.linsaya.SparkStatisticsJob
 import com.linsaya.common.CustomTransform
-import com.linsaya.common.util.{LoggerUtil, RDBDataframeUtil, SaveTableUtils}
+import com.linsaya.common.util.{RDBDataframeUtil, SaveTableUtils}
+import com.linsaya.manager.RDBPropManager
 import com.linsaya.reader.SourceReader
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.hive.HiveContext
@@ -12,9 +12,10 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
 
 
 class RDBSourceReader extends SourceReader with RDBDataframeUtil
-  with LoggerUtil with SaveTableUtils{
+  with RDBPropManager with SaveTableUtils {
 
-   def readDataSource(sc: SparkContext, sqlContext: SQLContext, hiveCtx: HiveContext, rdbProp: IndexedSeq[SparkStatisticsJob.RDBSQLProp]): Unit = {
+  def readDataSource(sc: SparkContext, sqlContext: SQLContext, hiveCtx: HiveContext): Unit = {
+     val rdbProp = genRDBSQLProp(getSysPropertiesFile)
      var dataframe: DataFrame = null
      for (prop <- rdbProp) {
        info(s"start load connectionProperties table name is ${prop.sourceTableName}")

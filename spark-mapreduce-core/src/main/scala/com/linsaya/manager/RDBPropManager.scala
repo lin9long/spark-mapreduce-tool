@@ -1,15 +1,18 @@
 package com.linsaya.manager
 
-import com.linsaya.SparkStatisticsJob.getPropertiesFile
+import java.util.Properties
+
+import com.linsaya.SparkStatisticsJob.rdb_data_source_sql_file_paths
 import com.linsaya.common.util.LoggerUtil
 
-trait RDBPropManager extends LoggerUtil {
+trait RDBPropManager extends LoggerUtil with PropFileManager {
 
   case class RDBSQLProp(sqlNo: Option[String], sql: String, storageLevel: String, needCacheTable: String,
                         driver: String, user: String, password: String, sourceTableName: String, tmpTableNameInSpark: String,
                         url: String,customTransForm:String)
 
-  def genRDBSQLProp(paths: Array[String]): IndexedSeq[RDBSQLProp] = {
+  def genRDBSQLProp(appPropFile: Properties): IndexedSeq[RDBSQLProp] = {
+    val paths = appPropFile.getProperty(rdb_data_source_sql_file_paths).split(",")
     if (paths.isEmpty) {
       error("DataSourceSQLProp is empty")
     }
