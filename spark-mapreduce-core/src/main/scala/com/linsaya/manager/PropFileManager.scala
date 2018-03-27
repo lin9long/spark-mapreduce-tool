@@ -24,4 +24,8 @@ trait PropFileManager {
     getPropertiesFile(System.getProperty("appConf.path"))
   }
 
+  def getDefaultPartition :String={
+    getSysPropertiesFile.getProperty("defaultPartition","3")
+  }
+
 }
