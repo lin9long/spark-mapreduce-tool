@@ -6,7 +6,6 @@ import com.richstone.mintaka.gemstack.common.CustomTransform
 import com.richstone.mintaka.gemstack.common.util.{RDBDataframeUtil, SaveTableUtils}
 import com.richstone.mintaka.gemstack.manager.CaseClassManager
 import com.richstone.mintaka.gemstack.reader.SourceReader
-import org.apache.spark.SparkContext
 import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.sql.{DataFrame, SQLContext}
 
@@ -27,7 +26,7 @@ class RDBSourceReader extends SourceReader with RDBDataframeUtil with CaseClassM
     * @author: llz
     * @Date: 2018/3/28
     */
-  def readDataSource[A](sc: SparkContext, sqlContext: SQLContext, hiveCtx: HiveContext, indexedSeq: IndexedSeq[A]): Unit = {
+  def readDataSource[A](sqlContext: SQLContext, hiveCtx: HiveContext, indexedSeq: IndexedSeq[A]): Unit = {
     val rdbProp = indexedSeq.asInstanceOf[IndexedSeq[RDBSQLProp]]
     var dataframe: DataFrame = null
     for (prop <- rdbProp) {
@@ -53,7 +52,7 @@ class RDBSourceReader extends SourceReader with RDBDataframeUtil with CaseClassM
         val className = prop.customTransformBeanName
         val clazz = Class.forName(className)
         info(s"dataframe customTransForm model is ${prop.customTransformBeanName}")
-        dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, sqlContext, sc)
+        dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, sqlContext, sqlContext.sparkContext)
       }
       //注册成临时表
       info(s"dataframe registerTempTable name is ${prop.tmpTableNameInSpark} count is ${dataframe.count()}")

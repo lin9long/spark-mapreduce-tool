@@ -5,9 +5,8 @@ import com.richstone.mintaka.gemstack.common.util.SaveTableUtils
 import com.richstone.mintaka.gemstack.manager.KpiStatisticsPropManager
 import com.richstone.mintaka.gemstack.worker.StatisticeWorker
 import com.richstone.mintaka.gemstack.writer.{DataFrameHdfsWriter, DataframeRdbWriter}
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.{DataFrame, SQLContext}
 import org.apache.spark.sql.hive.HiveContext
+import org.apache.spark.sql.{DataFrame, SQLContext}
 
 /**
   * @Description: ${todo}
@@ -17,7 +16,7 @@ import org.apache.spark.sql.hive.HiveContext
 class KpiStatisticsWorker extends StatisticeWorker with KpiStatisticsPropManager
   with SaveTableUtils with DataframeRdbWriter with DataFrameHdfsWriter{
 
-  def excuteStatistics(sc: SparkContext, sqlContext: SQLContext, hiveCtx: HiveContext) = {
+  def excuteStatistics( sqlContext: SQLContext, hiveCtx: HiveContext) = {
     var dataframe: DataFrame = null
     val kpiStatisticsProps = genKpiStatisticsProp(getSysPropertiesFile)
     for (kpiProp <- kpiStatisticsProps) {
@@ -30,7 +29,7 @@ class KpiStatisticsWorker extends StatisticeWorker with KpiStatisticsPropManager
         val className = kpiProp.customTransformBeanName
         val clazz = Class.forName(className)
         info(s"dataframe customTransForm model is ${kpiProp.customTransformBeanName}")
-        dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, sqlContext, sc)
+        dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, sqlContext, sqlContext.sparkContext)
       }
       //是否需要缓存
       if (kpiProp.needCacheTable == "Y" && !kpiProp.storageLevel.isEmpty) {

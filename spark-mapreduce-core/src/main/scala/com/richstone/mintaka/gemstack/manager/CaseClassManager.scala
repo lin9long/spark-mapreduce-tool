@@ -8,7 +8,7 @@ import com.richstone.mintaka.gemstack.common.Constants
   * @author llz
   * @create 2018-03-28 23:10
   **/
-trait CaseClassManager extends Constants{
+trait CaseClassManager extends Constants {
   //hive数据源
   case class DataSourceSQLProp(sqlNo: String, sql: String, storageLevel: String, needCacheTable: String,
                                targetTableNameInDB: String, tmpTableNameInSpark: String,

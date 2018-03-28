@@ -1,6 +1,7 @@
 package com.richstone.mintaka.gemstack.common.util
 
-import com.richstone.mintaka.gemstack.SparkStatisticsJob.{error, getPropertiesFile}
+import com.richstone.mintaka.gemstack.SparkStatisticsJob.{error}
+import com.richstone.mintaka.gemstack.manager.PropFileManager
 import org.apache.spark.storage.StorageLevel
 
 /**
@@ -9,7 +10,7 @@ import org.apache.spark.storage.StorageLevel
   * @author llz
   * @create 2018-03-25 11:41
   **/
-trait SaveTableUtils {
+trait SaveTableUtils extends PropFileManager{
 
   def getStorageLevel(str: String): StorageLevel = {
     str match {
@@ -35,15 +36,16 @@ trait SaveTableUtils {
   }
 
   def getPlaceholderValue(key: String): Tuple2[String, String] = {
-    var value = ""
-    if (!System.getProperty(key).isEmpty) {
-      value = System.getProperty(key)
-    } else {
+    var value = if (!System.getProperty(key).isEmpty) System.getProperty(key)
+    else {
       val appConf = System.getProperty("appConf.path")
       if (appConf.isEmpty) error("appConf name is not set")
       val appPropFile = getPropertiesFile(appConf)
       if (!appPropFile.getProperty(key).isEmpty) {
-        value = appPropFile.getProperty(key)
+        appPropFile.getProperty(key)
+      }else{
+        error(s"can not find the $key ---> value , please check the property")
+        ""
       }
     }
     (key, value)

@@ -2,7 +2,6 @@ package com.richstone.mintaka.gemstack.manager
 
 import java.util.Properties
 
-import com.richstone.mintaka.gemstack.SparkStatisticsJob.{getPropertiesFile, hive_data_source_sql_file_paths}
 import com.richstone.mintaka.gemstack.common.util.LoggerUtil
 
 /**
