@@ -5,6 +5,13 @@ import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.{SparkConf, SparkContext}
 
 
+/**
+  * @Description: spark上下文Holder
+  * @param:
+  * @return:
+  * @author: llz
+  * @Date: 2018/3/28
+  */
 class SparkConfHolder {
 
   var conf: SparkConf = new SparkConf()

@@ -4,7 +4,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.sql.{DataFrame, SQLContext}
 
 /**
-  * ${DESCRIPTION}
+  * @DESCRIPTION 自定义转换器接口
   *
   * @author llz
   * @create 2018-03-17 12:13

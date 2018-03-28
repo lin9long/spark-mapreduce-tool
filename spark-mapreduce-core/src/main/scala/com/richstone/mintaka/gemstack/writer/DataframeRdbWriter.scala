@@ -8,7 +8,7 @@ import org.apache.spark.sql.{DataFrame, SaveMode}
 import com.richstone.mintaka.gemstack.common.Constants
 
 /**
-  * ${DESCRIPTION}
+  * dataframe写入到rdb数据库
   *
   * @author llz
   * @create 2018-03-25 20:58

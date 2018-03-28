@@ -5,6 +5,13 @@ import java.util.Properties
 import com.richstone.mintaka.gemstack.SparkStatisticsJob.{getPropertiesFile, hive_data_source_sql_file_paths}
 import com.richstone.mintaka.gemstack.common.util.LoggerUtil
 
+/**
+  * @Description: hive数据源管理类
+  * @param:
+  * @return:
+  * @author: llz
+  * @Date: 2018/3/28
+  */
 trait HiveSourcePropManager extends LoggerUtil with PropFileManager{
 
   def genDataSourceSQLProp(appPropFile:Properties): IndexedSeq[DataSourceSQLProp] = {

@@ -11,13 +11,28 @@ import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.sql.{DataFrame, SQLContext}
 
 
+/**
+  * @Description:RDB数据源读取工具
+  * @param:
+  * @return:
+  * @author: llz
+  * @Date: 2018/3/28
+  */
 class RDBSourceReader extends SourceReader with RDBDataframeUtil
   with RDBPropManager with SaveTableUtils {
 
+  /**
+    * @Description:读取数据源
+    * @param: [sc, sqlContext, hiveCtx]
+    * @return: void
+    * @author: llz
+    * @Date: 2018/3/28
+    */
   def readDataSource(sc: SparkContext, sqlContext: SQLContext, hiveCtx: HiveContext): Unit = {
      val rdbProp = genRDBSQLProp(getSysPropertiesFile)
      var dataframe: DataFrame = null
      for (prop <- rdbProp) {
+       //创建jdbc连接
        info(s"start load connectionProperties table name is ${prop.sourceTableName}")
        val connectionProperties = new Properties()
        connectionProperties.put("user", prop.user)
@@ -25,9 +40,10 @@ class RDBSourceReader extends SourceReader with RDBDataframeUtil
        connectionProperties.put("password", prop.password)
        connectionProperties.put("table", prop.sourceTableName)
        connectionProperties.put("url", prop.url)
-
+       //生成dataframe
        dataframe = createDataFrameFromRDB(sqlContext, connectionProperties, prop.url)
        dataframe.registerTempTable(prop.tmpTableNameInSpark)
+
        //做一步etl转换
        if (!prop.sql.isEmpty) {
          info(s"dataframe etl sql is ${prop.sql}")

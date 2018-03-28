@@ -4,7 +4,7 @@ import com.richstone.mintaka.gemstack.manager.PropFileManager
 import org.apache.spark.sql.{DataFrame, SaveMode}
 
 /**
-  * @Description: ${todo}
+  * @Description: dataframe写入到hdfs
   * @author llz
   * @date 2018/3/2714:39
   */

@@ -8,13 +8,21 @@ import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.sql.{DataFrame, SQLContext}
 
 /**
-  * ${DESCRIPTION}
+  * hive数据源读取工具
   *
   * @author llz
   * @create 2018-03-18 9:30
   **/
 class HiveDataSourceReader extends SourceReader with HiveSourcePropManager {
 
+
+  /**
+    * @Description:读取数据源
+    * @param: [sc, sqlContext, hiveCtx]
+    * @return: void
+    * @author: llz
+    * @Date: 2018/3/28
+    */
   def readDataSource(sc: SparkContext, sqlContext: SQLContext, hiveCtx: HiveContext): Unit = {
     //获取hive配置文件
     val hiveProp = genDataSourceSQLProp(getSysPropertiesFile)

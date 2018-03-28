@@ -9,7 +9,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 /**
-  * @Description: ${todo}
+  * @Description: rdbdataframe工具类
   * @author llz
   * @date 2018/3/1610:47
   */

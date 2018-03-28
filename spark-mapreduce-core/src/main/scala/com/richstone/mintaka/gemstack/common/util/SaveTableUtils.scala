@@ -4,7 +4,7 @@ import com.richstone.mintaka.gemstack.SparkStatisticsJob.{error, getPropertiesFi
 import org.apache.spark.storage.StorageLevel
 
 /**
-  * ${DESCRIPTION}
+  * @Description保存表工具类
   *
   * @author llz
   * @create 2018-03-25 11:41

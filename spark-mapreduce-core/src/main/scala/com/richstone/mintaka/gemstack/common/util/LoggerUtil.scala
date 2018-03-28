@@ -6,6 +6,13 @@ import java.util.Date
 
 import org.slf4j.LoggerFactory
 
+/**
+  * @Description:log工具类
+  * @param:
+  * @return:
+  * @author: llz
+  * @Date: 2018/3/28
+  */
 trait LoggerUtil {
 
   private[this] val logger = LoggerFactory.getLogger(getClass().getName())

@@ -5,6 +5,13 @@ import java.util.Properties
 import com.richstone.mintaka.gemstack.SparkStatisticsJob.rdb_data_source_sql_file_paths
 import com.richstone.mintaka.gemstack.common.util.LoggerUtil
 
+/**
+  * @Description: rdb数据源管理类
+  * @param:
+  * @return:
+  * @author: llz
+  * @Date: 2018/3/28
+  */
 trait RDBPropManager extends LoggerUtil with PropFileManager {
 
   case class RDBSQLProp(sqlNo: Option[String], sql: String, storageLevel: String, needCacheTable: String,

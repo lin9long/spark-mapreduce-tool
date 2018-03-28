@@ -9,12 +9,13 @@ import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.hive.HiveContext
 
 /**
-  * @Description: ${todo}
+  * @Description: kpi统计逻辑
   * @author llz
   * @date 2018/3/2717:34
   */
 class KpiMapReduceJob extends MapReduceJob
   with HiveSourcePropManager with RDBPropManager with KpiStatisticsPropManager{
+
 
   override def excuteJob(sc: SparkContext,
                          hiveCtx: HiveContext,
