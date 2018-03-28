@@ -1,10 +1,6 @@
 package com.richstone.mintaka.gemstack
 
 import com.richstone.mintaka.gemstack.common.util.LoggerUtil
-import com.richstone.mintaka.gemstack.conf.SparkConfHolder
-import com.richstone.mintaka.gemstack.manager.PropFileManager
-import org.apache.spark.sql.SQLContext
-import com.richstone.mintaka.gemstack.common.Constants
 import com.richstone.mintaka.gemstack.job.MapReduceJob
 
 /**
@@ -13,8 +9,7 @@ import com.richstone.mintaka.gemstack.job.MapReduceJob
   * @author llz
   * @create 2018-03-17 15:16
   **/
-object SparkStatisticsJob extends SparkConfHolder
-  with PropFileManager with Constants with LoggerUtil {
+object SparkStatisticsJob  extends LoggerUtil {
 
   def main(args: Array[String]): Unit = {
 
@@ -40,7 +35,7 @@ object SparkStatisticsJob extends SparkConfHolder
     */
   def excuteJob(className: String): Unit = {
     val clazz = Class.forName(className)
-    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob(sc,hiveCtx,sqlContext)
+    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob()
   }
 
 }

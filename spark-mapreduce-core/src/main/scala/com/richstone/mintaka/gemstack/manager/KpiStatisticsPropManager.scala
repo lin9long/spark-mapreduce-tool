@@ -12,11 +12,9 @@ import com.richstone.mintaka.gemstack.common.util.LoggerUtil
   * @author: llz
   * @Date: 2018/3/28
   */
-trait KpiStatisticsPropManager extends LoggerUtil with PropFileManager {
+trait KpiStatisticsPropManager extends LoggerUtil with PropFileManager with CaseClassManager {
 
-  case class KpiStatisticsSQLProp(sqlNo: String, sql: String, storageLevel: String, needCacheTable: String,
-                                  targetTableNameInDB: String, targetPathOfHDFS: String, tmpTableNameInSpark: String
-   , customTransformBeanName: String)
+
 
   def genKpiStatisticsProp(appPropFile: Properties): IndexedSeq[KpiStatisticsSQLProp] = {
     val paths = appPropFile.getProperty(kpi_statistics_sql_file_paths).split(",")

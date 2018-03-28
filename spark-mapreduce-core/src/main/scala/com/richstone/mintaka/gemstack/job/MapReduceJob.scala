@@ -1,9 +1,7 @@
 package com.richstone.mintaka.gemstack.job
 
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.hive.HiveContext
+import com.richstone.mintaka.gemstack.conf.SparkConfHolder
 
-abstract trait MapReduceJob {
-  def excuteJob(sc:SparkContext,hiveCtx:HiveContext,sqlContext:SQLContext)
+abstract trait MapReduceJob extends SparkConfHolder{
+  def excuteJob()
 }
