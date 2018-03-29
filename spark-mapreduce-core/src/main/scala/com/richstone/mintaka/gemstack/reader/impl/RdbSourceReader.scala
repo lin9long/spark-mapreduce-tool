@@ -33,6 +33,7 @@ class RdbSourceReader extends SourceReader with RdbDataframeUtil with CaseClassM
       //创建jdbc连接
       info(s"start load connectionProperties table name is ${prop.sourceTableName}")
 
+      dataframe = loadDfByPredicates(prop, hiveCtx)
       //生成dataframe
       dataframe.registerTempTable(prop.tmpTableNameInSpark)
 
@@ -82,7 +83,7 @@ class RdbSourceReader extends SourceReader with RdbDataframeUtil with CaseClassM
     * @author: llz
     * @Date: 2018/3/29
     */
-  def loadDfByPredicates(prop: RDBSQLProp, hiveCtx: HiveContext): Unit = {
+  def loadDfByPredicates(prop: RDBSQLProp, hiveCtx: HiveContext): DataFrame = {
     val conn: Properties = genConnProp(prop)
     val predicates = if (!prop.partitionPredicates.isEmpty) prop.partitionPredicates.split(";") else new Array[String](0)
     if (predicates.length > 0) {

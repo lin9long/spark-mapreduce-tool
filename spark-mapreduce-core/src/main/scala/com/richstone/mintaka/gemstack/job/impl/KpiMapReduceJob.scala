@@ -27,7 +27,7 @@ class KpiMapReduceJob extends MapReduceJob
     val rdbSQLProps = genRDBSQLProp(getSysPropertiesFile)
     if (!rdbSQLProps.isEmpty) {
       info(s"rdbSQLProps size is not empty ,size is ${rdbSQLProps.length}")
-      val clazz = Class.forName("com.richstone.mintaka.gemstack.reader.impl.RDBSourceReader")
+      val clazz = Class.forName("com.richstone.mintaka.gemstack.reader.impl.RdbSourceReader")
       clazz.newInstance().
         asInstanceOf[RdbSourceReader].readDataSource(sqlContext, hiveCtx, rdbSQLProps)
     }
