@@ -24,7 +24,7 @@ trait RDBPropManager extends LoggerUtil with PropFileManager with CaseClassManag
       prop.getProperty("sql", ""), prop.getProperty("storageLevel", ""), prop.getProperty("needCacheTable", ""),
       prop.getProperty("driver", ""), prop.getProperty("user", ""), prop.getProperty("password", ""),
       prop.getProperty("sourceTableName", ""), prop.getProperty("tmpTableNameInSpark", ""), (prop.getProperty("url", "")),
-      prop.getProperty("customTransformBeanName", "")
+      prop.getProperty("customTransformBeanName", ""),prop.getProperty("partitionPredicates","")
     ))
     propList.seq
   }

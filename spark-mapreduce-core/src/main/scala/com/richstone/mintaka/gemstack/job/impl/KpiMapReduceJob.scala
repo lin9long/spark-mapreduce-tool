@@ -2,7 +2,7 @@ package com.richstone.mintaka.gemstack.job.impl
 
 import com.richstone.mintaka.gemstack.job.MapReduceJob
 import com.richstone.mintaka.gemstack.manager.{HiveSourcePropManager, KpiStatisticsPropManager, RDBPropManager}
-import com.richstone.mintaka.gemstack.reader.impl.{HiveDataSourceReader, RDBSourceReader}
+import com.richstone.mintaka.gemstack.reader.impl.{HiveDataSourceReader, RdbSourceReader}
 import com.richstone.mintaka.gemstack.worker.StatisticeWorker
 
 /**
@@ -29,7 +29,7 @@ class KpiMapReduceJob extends MapReduceJob
       info(s"rdbSQLProps size is not empty ,size is ${rdbSQLProps.length}")
       val clazz = Class.forName("com.richstone.mintaka.gemstack.reader.impl.RDBSourceReader")
       clazz.newInstance().
-        asInstanceOf[RDBSourceReader].readDataSource(sqlContext, hiveCtx, rdbSQLProps)
+        asInstanceOf[RdbSourceReader].readDataSource(sqlContext, hiveCtx, rdbSQLProps)
     }
 
     val kpiStatisticsProps = genKpiStatisticsProp(getSysPropertiesFile)

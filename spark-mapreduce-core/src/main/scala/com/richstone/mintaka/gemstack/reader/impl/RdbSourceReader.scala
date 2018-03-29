@@ -3,7 +3,7 @@ package com.richstone.mintaka.gemstack.reader.impl
 import java.util.Properties
 
 import com.richstone.mintaka.gemstack.common.CustomTransform
-import com.richstone.mintaka.gemstack.common.util.{RDBDataframeUtil, SaveTableUtils}
+import com.richstone.mintaka.gemstack.common.util.{RdbDataframeUtil, SaveTableUtils}
 import com.richstone.mintaka.gemstack.manager.CaseClassManager
 import com.richstone.mintaka.gemstack.reader.SourceReader
 import org.apache.spark.sql.hive.HiveContext
@@ -17,7 +17,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
   * @author: llz
   * @Date: 2018/3/28
   */
-class RDBSourceReader extends SourceReader with RDBDataframeUtil with CaseClassManager with SaveTableUtils {
+class RdbSourceReader extends SourceReader with RdbDataframeUtil with CaseClassManager with SaveTableUtils {
 
   /**
     * @Description:读取数据源
@@ -32,14 +32,8 @@ class RDBSourceReader extends SourceReader with RDBDataframeUtil with CaseClassM
     for (prop <- rdbProp) {
       //创建jdbc连接
       info(s"start load connectionProperties table name is ${prop.sourceTableName}")
-      val connectionProperties = new Properties()
-      connectionProperties.put("user", prop.user)
-      connectionProperties.setProperty("driver", prop.driver)
-      connectionProperties.put("password", prop.password)
-      connectionProperties.put("table", prop.sourceTableName)
-      connectionProperties.put("url", prop.url)
+
       //生成dataframe
-      dataframe = createDataFrameFromRDB(sqlContext, connectionProperties, prop.url)
       dataframe.registerTempTable(prop.tmpTableNameInSpark)
 
       //做一步etl转换
@@ -61,6 +55,40 @@ class RDBSourceReader extends SourceReader with RDBDataframeUtil with CaseClassM
         info(s"dataframe ${prop.tmpTableNameInSpark}storageLevel is ${prop.storageLevel}")
         dataframe.persist(getStorageLevel(prop.storageLevel))
       }
+    }
+  }
+
+  /**
+    * @Description: 创建数据库连接配置
+    * @param: [prop]
+    * @return: java.util.Properties
+    * @author: llz
+    * @Date: 2018/3/29
+    */
+  private def genConnProp[A](prop: RDBSQLProp) = {
+    val connectionProperties = new Properties()
+    connectionProperties.put("user", prop.user)
+    connectionProperties.setProperty("driver", prop.driver)
+    connectionProperties.put("password", prop.password)
+    connectionProperties.put("sourceTableName", prop.sourceTableName)
+    connectionProperties.put("url", prop.url)
+    connectionProperties
+  }
+
+  /**
+    * @Description: 根据分词信息创建dataframe
+    * @param: [prop, hiveCtx]
+    * @return: void
+    * @author: llz
+    * @Date: 2018/3/29
+    */
+  def loadDfByPredicates(prop: RDBSQLProp, hiveCtx: HiveContext): Unit = {
+    val conn: Properties = genConnProp(prop)
+    val predicates = if (!prop.partitionPredicates.isEmpty) prop.partitionPredicates.split(";") else new Array[String](0)
+    if (predicates.length > 0) {
+      createDataFrameFromRdbByPredicates(hiveCtx, predicates, conn, prop.url)
+    } else {
+      createDataFrameFromRdb(hiveCtx, conn, prop.url)
     }
   }
 }
