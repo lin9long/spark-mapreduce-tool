@@ -1,7 +1,7 @@
 package com.richstone.mintaka.gemstack.job.impl
 
 import com.richstone.mintaka.gemstack.job.MapReduceJob
-import com.richstone.mintaka.gemstack.manager.{HiveSourcePropManager, KpiStatisticsPropManager, RDBPropManager}
+import com.richstone.mintaka.gemstack.manager.{HiveSourcePropManager, KpiStatisticsPropManager, RdbSourcePropManager}
 import com.richstone.mintaka.gemstack.reader.impl.{HiveDataSourceReader, RdbSourceReader}
 import com.richstone.mintaka.gemstack.worker.StatisticeWorker
 
@@ -11,7 +11,7 @@ import com.richstone.mintaka.gemstack.worker.StatisticeWorker
   * @date 2018/3/2717:34
   */
 class KpiMapReduceJob extends MapReduceJob
-  with HiveSourcePropManager with RDBPropManager with KpiStatisticsPropManager {
+  with HiveSourcePropManager with RdbSourcePropManager with KpiStatisticsPropManager {
 
 
   override def excuteJob(): Unit = {

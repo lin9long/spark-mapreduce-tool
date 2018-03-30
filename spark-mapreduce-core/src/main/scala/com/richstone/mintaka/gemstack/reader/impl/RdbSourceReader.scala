@@ -3,7 +3,7 @@ package com.richstone.mintaka.gemstack.reader.impl
 import java.util.Properties
 
 import com.richstone.mintaka.gemstack.common.CustomTransform
-import com.richstone.mintaka.gemstack.common.util.{RdbDataframeUtil, SaveTableUtils}
+import com.richstone.mintaka.gemstack.common.util.{RdbDataframeUtil, SaveTableUtil}
 import com.richstone.mintaka.gemstack.manager.CaseClassManager
 import com.richstone.mintaka.gemstack.reader.SourceReader
 import org.apache.spark.sql.hive.HiveContext
@@ -17,7 +17,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
   * @author: llz
   * @Date: 2018/3/28
   */
-class RdbSourceReader extends SourceReader with RdbDataframeUtil with CaseClassManager with SaveTableUtils {
+class RdbSourceReader extends SourceReader with RdbDataframeUtil with CaseClassManager with SaveTableUtil {
 
   /**
     * @Description:读取数据源
@@ -51,11 +51,12 @@ class RdbSourceReader extends SourceReader with RdbDataframeUtil with CaseClassM
       }
       //注册成临时表
       info(s"dataframe registerTempTable name is ${prop.tmpTableNameInSpark} count is ${dataframe.count()}")
-      dataframe.registerTempTable(prop.tmpTableNameInSpark)
-      if (!prop.storageLevel.isEmpty && prop.needCacheTable == "Y") {
-        info(s"dataframe ${prop.tmpTableNameInSpark}storageLevel is ${prop.storageLevel}")
-        dataframe.persist(getStorageLevel(prop.storageLevel))
-      }
+      registerTempTable(prop.tmpTableNameInSpark, dataframe, hiveCtx, prop.storageLevel)
+      //      dataframe.registerTempTable(prop.tmpTableNameInSpark)
+      //      if (!prop.storageLevel.isEmpty && prop.needCacheTable == "Y") {
+      //        info(s"dataframe ${prop.tmpTableNameInSpark}storageLevel is ${prop.storageLevel}")
+      //        dataframe.persist(getStorageLevel(prop.storageLevel))
+      //      }
     }
   }
 

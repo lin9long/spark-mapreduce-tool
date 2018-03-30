@@ -1,7 +1,7 @@
 package com.richstone.mintaka.gemstack.worker.impl
 
 import com.richstone.mintaka.gemstack.common.CustomTransform
-import com.richstone.mintaka.gemstack.common.util.SaveTableUtils
+import com.richstone.mintaka.gemstack.common.util.SaveTableUtil
 import com.richstone.mintaka.gemstack.manager.KpiStatisticsPropManager
 import com.richstone.mintaka.gemstack.worker.StatisticeWorker
 import com.richstone.mintaka.gemstack.writer.{DataFrameHdfsWriter, DataframeRdbWriter}
@@ -14,7 +14,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
   * @date 2018/3/2717:31
   */
 class KpiStatisticsWorker extends StatisticeWorker with KpiStatisticsPropManager
-  with SaveTableUtils with DataframeRdbWriter with DataFrameHdfsWriter{
+  with SaveTableUtil with DataframeRdbWriter with DataFrameHdfsWriter{
 
   def excuteStatistics( sqlContext: SQLContext, hiveCtx: HiveContext) = {
     var dataframe: DataFrame = null

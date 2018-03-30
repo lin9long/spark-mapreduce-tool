@@ -18,7 +18,7 @@ trait CaseClassManager extends Constants {
                                   targetTableNameInDB: String, targetPathOfHDFS: String, tmpTableNameInSpark: String
                                   , customTransformBeanName: String)
   //rdb数据源
-  case class RDBSQLProp(sqlNo: Option[String], sql: String, storageLevel: String, needCacheTable: String,
+  case class RDBSQLProp(sqlNo: String, sql: String, storageLevel: String, needCacheTable: String,
                         driver: String, user: String, password: String, sourceTableName: String, tmpTableNameInSpark: String,
                         url: String,customTransformBeanName:String,partitionPredicates:String)
 }

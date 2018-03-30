@@ -22,11 +22,11 @@ trait KpiStatisticsPropManager extends LoggerUtil with PropFileManager with Case
     }
     val props = for (i <- 0 until paths.length) yield getPropertiesFile(paths(i))
     val propertieses = props.sortBy(p => p.getProperty("sqlNo"))
-    val propList = for (prop <- propertieses) yield (new KpiStatisticsSQLProp(prop.getProperty("sqlNo",""),
-      prop.getProperty("sql",""), prop.getProperty("storageLevel",""), prop.getProperty("needCacheTable",""),
-      prop.getProperty("targetTableNameInDB",""), prop.getProperty("targetPathOfHDFS",""),
-      prop.getProperty("tmpTableNameInSpark",""), prop.getProperty("customTransformBeanName","")
-    ))
+    val propList = for (prop <- propertieses) yield new KpiStatisticsSQLProp(prop.getProperty("sqlNo", ""),
+      prop.getProperty("sql", ""), prop.getProperty("storageLevel", ""), prop.getProperty("needCacheTable", ""),
+      prop.getProperty("targetTableNameInDB", ""), prop.getProperty("targetPathOfHDFS", ""),
+      prop.getProperty("tmpTableNameInSpark", ""), prop.getProperty("customTransformBeanName", "")
+    )
     propList.seq
   }
 }
