@@ -1,6 +1,5 @@
 package com.richstone.mintaka.gemstack.common.util
 
-import com.richstone.mintaka.gemstack.SparkStatisticsJob.{error}
 import com.richstone.mintaka.gemstack.manager.PropFileManager
 import org.apache.spark.storage.StorageLevel
 
@@ -10,8 +9,15 @@ import org.apache.spark.storage.StorageLevel
   * @author llz
   * @create 2018-03-25 11:41
   **/
-trait SaveTableUtils extends PropFileManager{
+trait SaveTablePrpoUtils extends PropFileManager{
 
+  /**
+    * @Description: 根据配置信息获取StorageLevel
+    * @param: [str]
+    * @return: org.apache.spark.storage.StorageLevel
+    * @author: llz
+    * @Date: 2018/3/29
+    */
   def getStorageLevel(str: String): StorageLevel = {
     str match {
       case "MEMORY_AND_DISK" => StorageLevel.MEMORY_AND_DISK
@@ -23,6 +29,13 @@ trait SaveTableUtils extends PropFileManager{
     }
   }
 
+  /**
+    * @Description: 替换占位符
+    * @param: [str]
+    * @return: java.lang.String
+    * @author: llz
+    * @Date: 2018/3/29
+    */
   def replacePlaceholder(str: String): String = {
     var newstr = str
     val pattern = "\\$\\{([\\w]+)\\}".r
@@ -35,17 +48,23 @@ trait SaveTableUtils extends PropFileManager{
     newstr
   }
 
+  /**
+    * @Description: 根据key查找配置信息
+    * @param: [key]
+    * @return: scala.Tuple2<java.lang.String,java.lang.String>
+    * @author: llz
+    * @Date: 2018/3/29
+    */
   def getPlaceholderValue(key: String): Tuple2[String, String] = {
-    var value = if (!System.getProperty(key).isEmpty) System.getProperty(key)
-    else {
+    var value = ""
+    if (!System.getProperty(key).isEmpty) {
+      value = System.getProperty(key)
+    } else {
       val appConf = System.getProperty("appConf.path")
       if (appConf.isEmpty) error("appConf name is not set")
       val appPropFile = getPropertiesFile(appConf)
       if (!appPropFile.getProperty(key).isEmpty) {
-        appPropFile.getProperty(key)
-      }else{
-        error(s"can not find the $key ---> value , please check the property")
-        ""
+        value = appPropFile.getProperty(key)
       }
     }
     (key, value)
