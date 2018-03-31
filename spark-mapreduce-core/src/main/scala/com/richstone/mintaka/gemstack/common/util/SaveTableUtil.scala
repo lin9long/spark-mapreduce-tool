@@ -1,6 +1,6 @@
 package com.richstone.mintaka.gemstack.common.util
 
-import com.richstone.mintaka.gemstack.manager.PropFileManager
+import com.richstone.mintaka.gemstack.manager.{CaseClassManager, PropFileManager}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.storage.StorageLevel
@@ -10,7 +10,7 @@ import org.apache.spark.storage.StorageLevel
   * @author llz
   * @create 2018-03-25 11:41
   **/
-trait SaveTableUtil extends PropFileManager {
+trait SaveTableUtil extends PropFileManager with CaseClassManager{
 
   def getStorageLevel(str: String): StorageLevel = {
     str match {
@@ -23,11 +23,14 @@ trait SaveTableUtil extends PropFileManager {
     }
   }
 
-  def registerTempTable(tableName: String, df: DataFrame, hiveCtx: HiveContext, storageLevel: String) = {
+  def registerTempTable(prop: CommonProp, df: DataFrame, hiveCtx: HiveContext) = {
+    val tableName = prop.tmpTableNameInSpark_
+    val storageLevel = prop.storageLevel_
+    val needCacheTable = prop.needCacheTable_
     if (tableName.isEmpty) error("tableName is null") else {
       info(s"register temp table name is $tableName")
       df.registerTempTable(tableName)
-      if (!storageLevel.isEmpty) {
+      if (!storageLevel.isEmpty && needCacheTable.equals("Y")) {
         info(s"$tableName persist storageLevel is $storageLevel")
         df.persist(getStorageLevel(storageLevel))
       }

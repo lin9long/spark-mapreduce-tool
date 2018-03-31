@@ -51,7 +51,7 @@ class RdbSourceReader extends SourceReader with RdbDataframeUtil with CaseClassM
       }
       //注册成临时表
       info(s"dataframe registerTempTable name is ${prop.tmpTableNameInSpark} count is ${dataframe.count()}")
-      registerTempTable(prop.tmpTableNameInSpark, dataframe, hiveCtx, prop.storageLevel)
+      registerTempTable(prop, dataframe, hiveCtx)
       //      dataframe.registerTempTable(prop.tmpTableNameInSpark)
       //      if (!prop.storageLevel.isEmpty && prop.needCacheTable == "Y") {
       //        info(s"dataframe ${prop.tmpTableNameInSpark}storageLevel is ${prop.storageLevel}")
