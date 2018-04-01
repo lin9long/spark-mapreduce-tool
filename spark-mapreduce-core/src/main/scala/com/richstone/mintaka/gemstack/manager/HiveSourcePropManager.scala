@@ -11,10 +11,11 @@ import com.richstone.mintaka.gemstack.common.util.LoggerUtil
   * @author: llz
   * @Date: 2018/3/28
   */
-trait HiveSourcePropManager extends LoggerUtil with PropFileManager with CaseClassManager{
+trait HiveSourcePropManager extends LoggerUtil with PropFileManager with CaseClassManager {
 
-  def genDataSourceSQLProp(appPropFile:Properties): IndexedSeq[DataSourceSQLProp] = {
-    val paths = appPropFile.getProperty(hive_data_source_sql_file_paths).split(",")
+  def genDataSourceSQLProp(appPropFile: Properties): IndexedSeq[DataSourceSQLProp] = {
+    val paths = if (appPropFile.getProperty(hive_data_source_sql_file_paths).equals("")) return null
+    else appPropFile.getProperty(hive_data_source_sql_file_paths).split(",")
     if (paths.isEmpty) {
       error("DataSourceSQLProp is empty")
     }
@@ -27,7 +28,6 @@ trait HiveSourcePropManager extends LoggerUtil with PropFileManager with CaseCla
     )
     propList.seq
   }
-
 
 
 }

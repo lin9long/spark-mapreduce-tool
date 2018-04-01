@@ -14,10 +14,10 @@ import com.richstone.mintaka.gemstack.common.util.LoggerUtil
 trait KpiStatisticsPropManager extends LoggerUtil with PropFileManager with CaseClassManager {
 
 
-
   def genKpiStatisticsProp(appPropFile: Properties): IndexedSeq[KpiStatisticsSQLProp] = {
-    val paths = appPropFile.getProperty(kpi_statistics_sql_file_paths).split(",")
-    if (paths.isEmpty){
+    val paths = if (appPropFile.getProperty(kpi_statistics_sql_file_paths).isEmpty) return null
+    else appPropFile.getProperty(kpi_statistics_sql_file_paths).split(",")
+    if (paths.isEmpty) {
       error("KpiStatisticsSQLProp is empty")
     }
     val props = for (i <- 0 until paths.length) yield getPropertiesFile(paths(i))

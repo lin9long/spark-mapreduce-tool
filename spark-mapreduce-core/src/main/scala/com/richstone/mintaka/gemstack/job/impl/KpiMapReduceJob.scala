@@ -15,9 +15,8 @@ class KpiMapReduceJob extends MapReduceJob
 
 
   override def excuteJob(): Unit = {
-
     val hiveSourceProps = genDataSourceSQLProp(getSysPropertiesFile)
-    if (!hiveSourceProps.isEmpty) {
+    if (hiveSourceProps != null) if (!hiveSourceProps.isEmpty) {
       info(s"hiveSQLProps size is not empty ,size is ${hiveSourceProps.length}")
       val clazz = Class.forName("com.richstone.mintaka.gemstack.reader.impl.HiveDataSourceReader")
       clazz.newInstance().
