@@ -1,6 +1,6 @@
 package com.richstone.mintaka.gemstack.common.util
 
-import com.richstone.mintaka.gemstack.manager.{CaseClassManager, PropFileManager}
+import com.richstone.mintaka.gemstack.manager.{CommonProp, PropFileManager}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.storage.StorageLevel
@@ -10,7 +10,7 @@ import org.apache.spark.storage.StorageLevel
   * @author llz
   * @create 2018-03-25 11:41
   **/
-trait SaveTableUtil extends PropFileManager with CaseClassManager{
+trait SaveTableUtil extends PropFileManager {
 
   def getStorageLevel(str: String): StorageLevel = {
     str match {

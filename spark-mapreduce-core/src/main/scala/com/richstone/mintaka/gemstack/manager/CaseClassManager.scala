@@ -8,17 +8,8 @@ import com.richstone.mintaka.gemstack.common.Constants
   * @author llz
   * @create 2018-03-28 23:10
   **/
-trait CaseClassManager extends Constants {
+trait CaseClassManager extends Constants{
 
-  class CommonProp(sqlNo: String, sql: String, storageLevel: String, needCacheTable: String,
-                   tmpTableNameInSpark: String, customTransformBeanName: String) {
-    val sqlNo_ = sqlNo
-    val sql_ = sql
-    val storageLevel_ = storageLevel
-    val needCacheTable_ = needCacheTable
-    val tmpTableNameInSpark_ = tmpTableNameInSpark
-    val customTransformBeanName_ = customTransformBeanName
-  }
 
   //hive数据源
   case class DataSourceSQLProp(sqlNo: String, sql: String, storageLevel: String,
@@ -39,4 +30,14 @@ trait CaseClassManager extends Constants {
                         url: String, customTransformBeanName: String, partitionPredicates: String)
     extends CommonProp(sqlNo,sql,storageLevel,needCacheTable,tmpTableNameInSpark,customTransformBeanName)
 
+}
+
+class CommonProp(sqlNo: String, sql: String, storageLevel: String, needCacheTable: String,
+                 tmpTableNameInSpark: String, customTransformBeanName: String) {
+  val sqlNo_ = sqlNo
+  val sql_ = sql
+  val storageLevel_ = storageLevel
+  val needCacheTable_ = needCacheTable
+  val tmpTableNameInSpark_ = tmpTableNameInSpark
+  val customTransformBeanName_ = customTransformBeanName
 }

@@ -24,7 +24,7 @@ class KpiMapReduceJob extends MapReduceJob
     }
 
     val rdbSQLProps = genRDBSQLProp(getSysPropertiesFile)
-    if (!rdbSQLProps.isEmpty) {
+    if  (rdbSQLProps != null) if(!rdbSQLProps.isEmpty) {
       info(s"rdbSQLProps size is not empty ,size is ${rdbSQLProps.length}")
       val clazz = Class.forName("com.richstone.mintaka.gemstack.reader.impl.RdbSourceReader")
       clazz.newInstance().
@@ -32,7 +32,7 @@ class KpiMapReduceJob extends MapReduceJob
     }
 
     val kpiStatisticsProps = genKpiStatisticsProp(getSysPropertiesFile)
-    if (!kpiStatisticsProps.isEmpty) {
+    if  (kpiStatisticsProps != null)if (!kpiStatisticsProps.isEmpty) {
       info(s"kpiStatisticsProps size is not empty ,size is ${kpiStatisticsProps.length}")
       val clazz = Class.forName("com.richstone.mintaka.gemstack.worker.impl.KpiStatisticsWorker")
       clazz.newInstance().
