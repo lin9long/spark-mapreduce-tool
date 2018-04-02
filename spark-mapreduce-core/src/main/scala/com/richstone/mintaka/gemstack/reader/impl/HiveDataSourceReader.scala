@@ -39,7 +39,7 @@ class HiveDataSourceReader extends SourceReader with CaseClassManager with SaveT
         val className = prop.customTransformBeanName
         val clazz = Class.forName(className)
         info(s"dataframe customTransForm model is ${prop.customTransformBeanName}")
-        dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, sqlContext, sqlContext.sparkContext)
+        dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, hiveCtx, sqlContext.sparkContext)
       }
       info(s"dataframe registerTempTable name is ${prop.tmpTableNameInSpark} count is ${dataframe.count()}")
       registerTempTable(prop, dataframe, hiveCtx)

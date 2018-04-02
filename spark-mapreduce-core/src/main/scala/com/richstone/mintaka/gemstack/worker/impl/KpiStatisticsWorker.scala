@@ -29,7 +29,7 @@ class KpiStatisticsWorker extends StatisticeWorker with KpiStatisticsPropManager
         val className = kpiProp.customTransformBeanName
         val clazz = Class.forName(className)
         info(s"dataframe customTransForm model is ${kpiProp.customTransformBeanName}")
-        dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, sqlContext, sqlContext.sparkContext)
+        dataframe = clazz.newInstance().asInstanceOf[CustomTransform].transform(dataframe, hiveCtx, hiveCtx.sparkContext)
       }
       //是否需要缓存
       if (kpiProp.needCacheTable == "Y" && !kpiProp.storageLevel.isEmpty) {
@@ -46,7 +46,7 @@ class KpiStatisticsWorker extends StatisticeWorker with KpiStatisticsPropManager
       //是否需要入到指定的数据库
       if (!kpiProp.targetTableNameInDB.isEmpty) {
         info(s"KpiStatistics targetTableNameInDB is ${replacePlaceholder(kpiProp.targetTableNameInDB)}")
-        writeDataFrameToRdb("local-oracle",kpiProp.targetTableNameInDB, dataframe)
+        writeDataFrameToRdb("cz-oracle",kpiProp, dataframe)
       }
     }
   }
