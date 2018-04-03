@@ -21,7 +21,7 @@ trait KpiStatisticsPropManager extends LoggerUtil with PropFileManager with Case
       error("KpiStatisticsSQLProp is empty")
     }
     val props = for (i <- 0 until paths.length) yield getPropertiesFile(paths(i))
-    val propertieses = props.sortBy(p => p.getProperty("sqlNo"))
+    val propertieses = props.filter(_ != null).sortBy(p => p.getProperty("sqlNo"))
     val propList = for (prop <- propertieses) yield new KpiStatisticsSQLProp(prop.getProperty("sqlNo", ""),
       prop.getProperty("sql", ""), prop.getProperty("storageLevel", ""), prop.getProperty("needCacheTable", ""),
       prop.getProperty("targetTableNameInDB", ""), prop.getProperty("targetPathOfHDFS", ""),

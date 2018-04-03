@@ -2,6 +2,7 @@ package com.richstone.mintaka.gemstack
 
 import com.richstone.mintaka.gemstack.common.util.LoggerUtil
 import com.richstone.mintaka.gemstack.job.MapReduceJob
+import com.richstone.mintaka.gemstack.manager.ApplicationContextManager
 
 /**
   * @deprecated spark统计入库
@@ -9,7 +10,7 @@ import com.richstone.mintaka.gemstack.job.MapReduceJob
   * @author llz
   * @create 2018-03-17 15:16
   **/
-object SparkStatisticsJob  extends LoggerUtil {
+object SparkStatisticsJob extends LoggerUtil with ApplicationContextManager {
 
   def main(args: Array[String]): Unit = {
 
@@ -34,8 +35,7 @@ object SparkStatisticsJob  extends LoggerUtil {
     * @Date: 2018/3/28
     */
   def excuteJob(className: String): Unit = {
-    val clazz = Class.forName(className)
-    clazz.newInstance().asInstanceOf[MapReduceJob].excuteJob()
+    getBean[MapReduceJob](className).excuteJob()
   }
 
 }

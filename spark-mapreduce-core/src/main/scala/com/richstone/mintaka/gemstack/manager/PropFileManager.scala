@@ -16,9 +16,11 @@ trait PropFileManager extends LoggerUtil {
     * @Date: 2018/3/25
     */
   def getPropertiesFile(filepath: String): Properties = {
+    if (filepath.isEmpty) return null
     val ips = new BufferedInputStream(new FileInputStream(filepath))
     val prop = new Properties
     prop.load(ips)
+    if (prop.keySet().isEmpty) error(s"can not find any props from file $filepath ")
     prop
   }
 

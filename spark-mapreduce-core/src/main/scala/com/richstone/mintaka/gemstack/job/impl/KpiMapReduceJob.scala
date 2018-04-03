@@ -26,7 +26,7 @@ class KpiMapReduceJob extends MapReduceJob
     if (rdbSQLProps != null) if (!rdbSQLProps.isEmpty) {
       info(s"rdbSQLProps size is not empty ,size is ${rdbSQLProps.length}")
       getBean[RdbSourceReader]("com.richstone.mintaka.gemstack.reader.impl.RdbSourceReader")
-        .readDataSource(sqlContext, hiveCtx, hiveSourceProps)
+        .readDataSource(sqlContext, hiveCtx, rdbSQLProps)
 
     }
 

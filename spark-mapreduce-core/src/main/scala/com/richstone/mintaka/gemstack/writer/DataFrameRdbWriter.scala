@@ -18,8 +18,7 @@ import scala.util.control.NonFatal
   * @author llz
   * @date 2018/3/1114:41
   */
-trait DataframeRdbWriter extends Constants with Logging
-  with PropFileManager with CaseClassManager{
+trait DataframeRdbWriter extends PropFileManager with CaseClassManager{
 
   /**
     * @Description: 保存数据到RDB数据库
@@ -33,13 +32,14 @@ trait DataframeRdbWriter extends Constants with Logging
     val tableName = kpiProp.targetTableNameInDB
     val url = prop.getProperty("url", "")
     val rddSchema = dataFrame.schema
-    logInfo(s"dataFrame numFields is ${rddSchema.fields.length}")
+    info(s"dataFrame numFields is ${rddSchema.fields.length}")
     //生产插入状态的空值数据
     val nullType = dataFrame.schema.fields.map { field => getJdbcType(field.dataType).jdbcNullType }
     val start = System.currentTimeMillis()
-    logInfo(s"sql no is ${kpiProp.sqlNo} save dataframe to oracle start " +
+    info(s"sql no is ${kpiProp.sqlNo} save dataframe to oracle start " +
       s"dataFrame count is ${dataFrame.count()}")
-    dataFrame.foreachPartition(iterator => {
+    val partition = dataFrame.sqlContext.sparkContext.getConf.get("spark.executor.instances", getDefaultPartition).toInt
+    dataFrame.coalesce(partition).foreachPartition(iterator => {
       val conn = JdbcUtils.createConnectionFactory(url, prop)()
       var committed = false
       val supportsTransactions = try {
@@ -47,7 +47,7 @@ trait DataframeRdbWriter extends Constants with Logging
           conn.getMetaData().supportsDataDefinitionAndDataManipulationTransactions()
       } catch {
         case NonFatal(e) =>
-          logWarning("Exception while detecting transaction support", e)
+          warn("Exception while detecting transaction support", e)
           true
       }
       try {
@@ -122,13 +122,13 @@ trait DataframeRdbWriter extends Constants with Logging
           try {
             conn.close()
           } catch {
-            case e: Exception => logWarning("Transaction succeeded, but closing failed", e)
+            case e: Exception => warn("Transaction succeeded, but closing failed", e)
           }
         }
       }
     })
     val end = System.currentTimeMillis()
-    logInfo(s"save dataframe to oracle finish cost time is ${end - start}")
+    info(s"save dataframe to oracle finish cost time is ${end - start}")
 
   }
 
@@ -141,7 +141,7 @@ trait DataframeRdbWriter extends Constants with Logging
       if (field.name.equals("statistical_time")) "to_date(?, 'yyyy-mm-dd hh24:mi:ss')" else "?"
     }).mkString(",")
     val sql = s"INSERT INTO $table ($columns) VALUES ($placeholders)"
-    logInfo(s"insertStatement sql is $sql")
+    info(s"insertStatement sql is $sql")
     conn.prepareStatement(sql)
   }
 
@@ -182,6 +182,13 @@ trait DataframeRdbWriter extends Constants with Logging
       throw new IllegalArgumentException(s"Can't get JDBC type for ${dt.simpleString}"))
   }
 
+  /**
+    * @Description: 生成数据库连接prop
+    * @param: [propName]
+    * @return: java.util.Properties
+    * @author: llz
+    * @Date: 2018/4/2
+    */
   private def genConnProp(propName: String) = {
     val connTuples = rdbProps(propName)
     val prop = new Properties()
