@@ -29,11 +29,11 @@ class HiveDataSourceReader extends SourceReader with CaseClassManager with SaveT
     for (prop <- hiveProp) {
       info(s"start load hiveSourceProp table name is ${prop.sourceTableName}")
       var dataframe: DataFrame = null
-      info(s"HiveDataSourceReader sql is ${prop.sql}")
+      info(s"HiveDataSourceReader sql is ${replacePlaceholder(prop.sql)}")
       dataframe = hiveCtx.sql(if (prop.sql.isEmpty) {
         error("please set HiveDataSourceReader sql")
         ""
-      } else prop.sql)
+      } else replacePlaceholder(prop.sql))
       //自定义转换
       if (!prop.customTransformBeanName.isEmpty) {
         val className = prop.customTransformBeanName

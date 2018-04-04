@@ -26,7 +26,7 @@ trait PropFileManager extends LoggerUtil {
 
   def getProperty(key: String): String = {
     val jvmProp = System.getProperties
-    val value = if (getSysPropertiesFile.getProperty(key).isEmpty)
+    val value = if (getSysPropertiesFile.getProperty(key,"").isEmpty)
       jvmProp.getProperty(key) else getSysPropertiesFile.getProperty(key)
     value
   }

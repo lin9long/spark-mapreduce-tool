@@ -45,6 +45,7 @@ trait SaveTableUtil extends PropFileManager {
       newstr = newstr.replace("${" + tuple._1 + "}", tuple._2)
     })
     newstr
+
   }
 
 

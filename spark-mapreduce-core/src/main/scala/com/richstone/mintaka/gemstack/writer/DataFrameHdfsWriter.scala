@@ -8,7 +8,7 @@ import org.apache.spark.sql.{DataFrame, SaveMode}
   * @author llz
   * @date 2018/3/2714:39
   */
-trait DataFrameHdfsWriter extends PropFileManager  {
+trait DataFrameHdfsWriter extends PropFileManager with Serializable {
   def writeDataFrameToHdfs(path: String, df: DataFrame) = {
     //使用不走shuffle的coalesce分区方式，对DataFrame重新分区(分区数为executor个数)，
     //分区的目的：避免输出数据时因分区数太多导致小文件数据太多

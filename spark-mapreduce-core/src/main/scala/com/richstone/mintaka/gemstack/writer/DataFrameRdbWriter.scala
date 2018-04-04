@@ -18,7 +18,7 @@ import scala.util.control.NonFatal
   * @author llz
   * @date 2018/3/1114:41
   */
-trait DataframeRdbWriter extends PropFileManager with CaseClassManager{
+trait DataframeRdbWriter extends PropFileManager with CaseClassManager with Serializable{
 
   /**
     * @Description: 保存数据到RDB数据库
@@ -138,10 +138,10 @@ trait DataframeRdbWriter extends PropFileManager with CaseClassManager{
   def insertStatement(conn: Connection, table: String, rddSchema: StructType): PreparedStatement = {
     val columns = rddSchema.fields.map(_.name).mkString(",")
     val placeholders = rddSchema.fields.map(field => {
-      if (field.name.equals("statistical_time")) "to_date(?, 'yyyy-mm-dd hh24:mi:ss')" else "?"
+      if (field.name.equals("statistical_time")) "to_date(?, 'yyyy-MM-dd HH24:mi:ss')" else "?"
     }).mkString(",")
     val sql = s"INSERT INTO $table ($columns) VALUES ($placeholders)"
-    info(s"insertStatement sql is $sql")
+//    info(s"insertStatement sql is $sql")
     conn.prepareStatement(sql)
   }
 
