@@ -13,7 +13,7 @@ import com.richstone.mintaka.gemstack.common.util.LoggerUtil
   */
 trait KpiStatisticsPropManager extends LoggerUtil with PropFileManager with CaseClassManager {
 
-
+  this.synchronized() {
   def genKpiStatisticsProp(appPropFile: Properties): IndexedSeq[KpiStatisticsSQLProp] = {
     val paths = if (appPropFile.getProperty(kpi_statistics_sql_file_paths).isEmpty) return null
     else appPropFile.getProperty(kpi_statistics_sql_file_paths).split(",")
@@ -28,5 +28,6 @@ trait KpiStatisticsPropManager extends LoggerUtil with PropFileManager with Case
       prop.getProperty("tmpTableNameInSpark", ""), prop.getProperty("customTransformBeanName", "")
     )
     propList.seq
+  }
   }
 }

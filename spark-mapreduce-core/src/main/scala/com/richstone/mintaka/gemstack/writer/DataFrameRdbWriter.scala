@@ -3,9 +3,8 @@ package com.richstone.mintaka.gemstack.writer
 import java.sql.{Connection, PreparedStatement}
 import java.util.Properties
 
-import com.richstone.mintaka.gemstack.common.Constants
 import com.richstone.mintaka.gemstack.manager.{CaseClassManager, PropFileManager}
-import org.apache.spark.Logging
+import mintaka.util.DataFrameConverter
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.jdbc.JdbcType
@@ -38,8 +37,9 @@ trait DataframeRdbWriter extends PropFileManager with CaseClassManager with Seri
     val start = System.currentTimeMillis()
     info(s"sql no is ${kpiProp.sqlNo} save dataframe to oracle start " +
       s"dataFrame count is ${dataFrame.count()}")
+//     dataFrame = DataFrameConverter.DataFrameConverter(dataFrame)
     val partition = dataFrame.sqlContext.sparkContext.getConf.get("spark.executor.instances", getDefaultPartition).toInt
-    dataFrame.coalesce(partition).foreachPartition(iterator => {
+    DataFrameConverter.DataFrameConverter(dataFrame).coalesce(partition).foreachPartition(iterator => {
       val conn = JdbcUtils.createConnectionFactory(url, prop)()
       var committed = false
       val supportsTransactions = try {
@@ -137,11 +137,12 @@ trait DataframeRdbWriter extends PropFileManager with CaseClassManager with Seri
     */
   def insertStatement(conn: Connection, table: String, rddSchema: StructType): PreparedStatement = {
     val columns = rddSchema.fields.map(_.name).mkString(",")
-    val placeholders = rddSchema.fields.map(field => {
-      if (field.name.equals("statistical_time")) "to_date(?, 'yyyy-MM-dd HH24:mi:ss')" else "?"
-    }).mkString(",")
+    //    val placeholders = rddSchema.fields.map(field => {
+    //      if (field.name.equals("statistical_time")) "to_date(?, 'yyyy-MM-dd HH24:mi:ss')" else "?"
+    //    }).mkString(",")
+    val placeholders = rddSchema.fields.map(_ => "?").mkString(",")
     val sql = s"INSERT INTO $table ($columns) VALUES ($placeholders)"
-//    info(s"insertStatement sql is $sql")
+    info(s"insertStatement sql is $sql")
     conn.prepareStatement(sql)
   }
 
