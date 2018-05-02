@@ -39,7 +39,7 @@ trait DataframeRdbWriter extends PropFileManager with CaseClassManager with Seri
       s"dataFrame count is ${dataFrame.count()}")
 //     dataFrame = DataFrameConverter.DataFrameConverter(dataFrame)
     val partition = dataFrame.sqlContext.sparkContext.getConf.get("spark.executor.instances", getDefaultPartition).toInt
-    DataFrameConverter.DataFrameConverter(dataFrame).coalesce(partition).foreachPartition(iterator => {
+    DataFrameConverter.DataFrameConverDateType(dataFrame).coalesce(partition).foreachPartition(iterator => {
       val conn = JdbcUtils.createConnectionFactory(url, prop)()
       var committed = false
       val supportsTransactions = try {

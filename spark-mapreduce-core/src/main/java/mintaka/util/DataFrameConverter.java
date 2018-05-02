@@ -22,7 +22,7 @@ public class DataFrameConverter {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DataFrameConverter.class);
-    public static DataFrame DataFrameConverter(DataFrame dataFrame){
+    public static DataFrame DataFrameConverDateType(DataFrame dataFrame){
         //获取dataframe的字段
         StructType schema = dataFrame.schema();
         String[] fieldNames = schema.fieldNames();
