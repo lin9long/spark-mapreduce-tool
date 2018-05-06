@@ -12,10 +12,12 @@ import com.richstone.mintaka.gemstack.manager.PropFileManager
   **/
 object test extends PropFileManager{
   def main(args: Array[String]): Unit = {
-    val prop = new Properties()
-    val str = prop.getProperty("12323")
-    println(str)
-    replacePlaceholder("/richstone/mintaka/teacher/slicetime=${slicetime}")
+//    val prop = new Properties()
+//    val str = prop.getProperty("12323")
+//    println(str)
+    replacePlaceholder("/richstone/mintaka/teacher/slicetime=2017010as1")
+//    val list = Array(1,3,4,5,null,8)
+//    list.filter(_!=null).foreach(str => println(str.toString))
   }
 
   def replacePlaceholder(str: String): String = {
@@ -31,6 +33,7 @@ object test extends PropFileManager{
     })
     println(newstr)
     newstr
+
   }
 
   def getPlaceholderValue(key: String): Tuple2[String, String] = {

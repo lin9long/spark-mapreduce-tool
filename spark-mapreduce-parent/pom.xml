@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>../spark-batch-statitics</module>
         <module>../spark-mapreduce-core</module>
         <module>../spark-mapreduce-zhgd</module>
     </modules>

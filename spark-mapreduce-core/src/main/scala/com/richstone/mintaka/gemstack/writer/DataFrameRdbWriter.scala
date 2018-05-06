@@ -17,6 +17,7 @@ import scala.util.control.NonFatal
   * @author llz
   * @date 2018/3/1114:41
   */
+@SerialVersionUID(2353147180743153650L)
 trait DataframeRdbWriter extends PropFileManager with CaseClassManager with Serializable{
 
   /**

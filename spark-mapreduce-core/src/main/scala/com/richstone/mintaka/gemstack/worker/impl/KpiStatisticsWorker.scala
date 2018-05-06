@@ -14,7 +14,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
   * @date 2018/3/2717:31
   */
 class KpiStatisticsWorker extends StatisticeWorker with KpiStatisticsPropManager
-  with SaveTableUtil with DataframeRdbWriter with DataFrameHdfsWriter{
+  with SaveTableUtil with DataframeRdbWriter with DataFrameHdfsWriter {
 
   def excuteStatistics( sqlContext: SQLContext, hiveCtx: HiveContext) = {
     var dataframe: DataFrame = null

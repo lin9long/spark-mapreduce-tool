@@ -7,6 +7,10 @@ trait Constants {
   val rdb_data_source_sql_file_paths = "rdb.data.source.sql.file.paths"
   val kpi_statistics_sql_file_paths = "kpi.statistics.sql.file.paths"
 
+  val hardxdr_data_source_file_paths = "hardxdr.data.source.file.paths"
+  val hardxdr_raw_root_path="/richstonedt/mintaka/gemstack-cz/dg-gemstack/raw-data"
+  val hardxdr_root_path="/richstonedt/mintaka/gemstack-cz/dg-gemstack/data"
+
   val rdbProps = Map(
     "mysql" -> {
       List(Tuple2("user", "root"),

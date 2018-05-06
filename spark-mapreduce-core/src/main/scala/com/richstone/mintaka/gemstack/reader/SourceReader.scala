@@ -9,6 +9,6 @@ import org.apache.spark.sql.hive.HiveContext
   * @author llz
   * @date 2018/3/279:20
   */
-trait SourceReader extends LoggerUtil {
+trait SourceReader extends LoggerUtil with Serializable {
   def readDataSource[A](sqlContext: SQLContext, hiveCtx: HiveContext, indexedSeq: IndexedSeq[A])
 }

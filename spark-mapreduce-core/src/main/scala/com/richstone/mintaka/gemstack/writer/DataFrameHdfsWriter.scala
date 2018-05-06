@@ -8,6 +8,7 @@ import org.apache.spark.sql.{DataFrame, SaveMode}
   * @author llz
   * @date 2018/3/2714:39
   */
+@SerialVersionUID(9121347880743153650L)
 trait DataFrameHdfsWriter extends PropFileManager with Serializable {
   def writeDataFrameToHdfs(path: String, df: DataFrame) = {
     //使用不走shuffle的coalesce分区方式，对DataFrame重新分区(分区数为executor个数)，
