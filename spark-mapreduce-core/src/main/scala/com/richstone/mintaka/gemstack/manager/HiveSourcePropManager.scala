@@ -20,12 +20,13 @@ trait HiveSourcePropManager extends LoggerUtil with PropFileManager with CaseCla
       error("DataSourceSQLProp is empty")
     }
     val props = for (i <- 0 until paths.length) yield getPropertiesFile(paths(i))
-    val propertieses = props.filter(_!=null).sortBy(p => p.getProperty("sqlNo"))
+    val propertieses = props.filter(_!=null).sortBy(p => Integer.valueOf(p.getProperty("sqlNo")))
     val propList = for (prop <- propertieses) yield new DataSourceSQLProp(prop.getProperty("sqlNo", ""),
       prop.getProperty("sql", ""), prop.getProperty("storageLevel", ""), prop.getProperty("needCacheTable", ""),
       prop.getProperty("targetTableNameInDB", ""), prop.getProperty("tmpTableNameInSpark", ""),
       prop.getProperty("sourceTableName", ""), prop.getProperty("customTransformBeanName", "")
     )
+
     propList.seq
   }
 

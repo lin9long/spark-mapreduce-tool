@@ -33,12 +33,13 @@ class HardXdrEtlWorker extends BaseWorker with HardxdrPropManager with EtlUtils
       val rawData = sc.textFile(s"$hardxdr_raw_root_path/$xdr/*.xdr")
       val xdrLength = Integer.valueOf(prop.xdrLength)
       val timepos = Integer.valueOf(timeposstr.get)
-      info(s"timepos is ${Integer.valueOf(timeposstr.get)},xdrLength is${Integer.valueOf(prop.xdrLength)}")
+      info(s"timepos is ${Integer.valueOf(timeposstr.get)}" +
+        s",xdrLength is${Integer.valueOf(prop.xdrLength)}")
       val filterData = rawData.filter(line =>
         filterXdrData(line.split(",", -1), timepos, xdrLength)
         //        line.split(",",-1).length==xdrLength
       )
-      val rows = filterData.mapPartitions(line => {
+      val rows = filterData.map(line => {
         val strings = line.split(",")
         //        for(map <- mapFields){
         //          val key = map._1
@@ -64,8 +65,9 @@ class HardXdrEtlWorker extends BaseWorker with HardxdrPropManager with EtlUtils
         Row.fromSeq(values)
         //              Row.empty
       })
-      info(s"rows.take(1).length is ${rows.take(1).length}")
-      sqlContext.createDataFrame(rows, field).write.mode(SaveMode.Overwrite).parquet(s"$hardxdr_root_path/$xdr/year=2017/month=5/day=16/hour=0/minute=00/test.parquet")
+      info(s"rows.length is ${rows.take(1).length}")
+      sqlContext.createDataFrame(rows, field).write.mode(SaveMode.Overwrite)
+        .parquet(s"$hardxdr_root_path/$xdr/year=2017/month=5/day=16/hour=0/minute=00/")
     }
   }
 

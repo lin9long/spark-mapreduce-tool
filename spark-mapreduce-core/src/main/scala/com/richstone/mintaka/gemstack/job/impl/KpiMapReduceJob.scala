@@ -2,7 +2,6 @@ package com.richstone.mintaka.gemstack.job.impl
 
 import com.richstone.mintaka.gemstack.job.MapReduceJob
 import com.richstone.mintaka.gemstack.manager._
-import com.richstone.mintaka.gemstack.reader.SourceReader
 import com.richstone.mintaka.gemstack.reader.impl.{HiveDataSourceReader, RdbSourceReader}
 import com.richstone.mintaka.gemstack.worker.StatisticeWorker
 
@@ -12,19 +11,19 @@ import com.richstone.mintaka.gemstack.worker.StatisticeWorker
   * @date 2018/3/2717:34
   */
 @SerialVersionUID(9146747180743153650L)
-class KpiMapReduceJob extends MapReduceJob with HardxdrPropManager
+class KpiMapReduceJob extends MapReduceJob
   with HiveSourcePropManager with RdbSourcePropManager
   with KpiStatisticsPropManager with ApplicationContextManager
   with Serializable {
 
   override def excuteJob(): Unit = {
-    val hardxdrProps = genHardxdrProp(getSysPropertiesFile)
-    if (hardxdrProps != null) if (!hardxdrProps.isEmpty) {
-      info(s"hardxdrProps is not empty,size is ${hardxdrProps.size}")
-      for (prop <- hardxdrProps) info(s"hardxdrProps sql no is ${prop.sqlno}")
-      getBean[HardXdrEtlReader]("com.richstone.mintaka.gemstack.reader.impl.HardXdrEtlReader")
-            .readDataSource(sqlContext,hiveCtx,hardxdrProps)
-    }
+//    val hardxdrProps = genHardxdrProp(getSysPropertiesFile)
+//    if (hardxdrProps != null) if (!hardxdrProps.isEmpty) {
+//      info(s"hardxdrProps is not empty,size is ${hardxdrProps.size}")
+//      for (prop <- hardxdrProps) info(s"hardxdrProps sql no is ${prop.sqlno}")
+//      getBean[HardXdrEtlReader]("com.richstone.mintaka.gemstack.reader.impl.HardXdrEtlReader")
+//            .readDataSource(sqlContext,hiveCtx,hardxdrProps)
+//    }
 
 
     val hiveSourceProps = genDataSourceSQLProp(getSysPropertiesFile)

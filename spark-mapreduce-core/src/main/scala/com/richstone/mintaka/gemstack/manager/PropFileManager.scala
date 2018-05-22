@@ -1,6 +1,6 @@
 package com.richstone.mintaka.gemstack.manager
 
-import java.io.{BufferedInputStream, FileInputStream}
+import java.io.{BufferedInputStream, File, FileInputStream}
 import java.util.Properties
 
 import com.richstone.mintaka.gemstack.common.util.LoggerUtil
@@ -23,6 +23,7 @@ trait PropFileManager extends LoggerUtil {
     if (prop.keySet().isEmpty) error(s"can not find any props from file $filepath ")
     prop
   }
+
 
   def getProperty(key: String): String = {
     val jvmProp = System.getProperties

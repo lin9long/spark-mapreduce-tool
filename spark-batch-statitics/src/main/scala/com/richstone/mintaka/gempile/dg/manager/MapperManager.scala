@@ -1,5 +1,6 @@
 package com.richstone.mintaka.gempile.dg.manager
 
+import java.io.{BufferedInputStream, FileInputStream}
 import java.util.Properties
 
 import com.richstone.mintaka.gempile.dg.Utils.Constants
@@ -34,7 +35,9 @@ trait MapperManager extends LoggerUtil with PropFileManager with Constants {
   def genKeyValueMap(path: String): Map[String, String] = {
     info(s"Gen $path mapper files start")
     val map = Map[String, String]()
-    val lines = Source.fromFile(path).getLines()
+    val ips = new BufferedInputStream(new FileInputStream(path))
+    val prop = new Properties
+    val lines = Source.fromInputStream(ips).getLines()
     for (line <- lines) {
 //      info(s"line is $line")
       val strings = line.split(",")

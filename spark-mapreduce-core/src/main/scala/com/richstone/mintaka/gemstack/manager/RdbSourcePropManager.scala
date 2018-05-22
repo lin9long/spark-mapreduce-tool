@@ -20,7 +20,7 @@ trait RdbSourcePropManager extends LoggerUtil with PropFileManager with CaseClas
       error("DataSourceSQLProp is empty")
     }
     val props = for (i <- 0 until paths.length) yield getPropertiesFile(paths(i))
-    val propertieses = props.filter(_!=null).sortBy(p => p.getProperty("sqlNo"))
+    val propertieses = props.filter(_!=null).sortBy(p => Integer.valueOf(p.getProperty("sqlNo")))
     val propList = for (prop <- propertieses) yield new RDBSQLProp(prop.getProperty("sqlNo", ""),
       prop.getProperty("sql", ""), prop.getProperty("storageLevel", ""), prop.getProperty("needCacheTable", ""),
       prop.getProperty("driver", ""), prop.getProperty("user", ""), prop.getProperty("password", ""),
